@@ -1080,9 +1080,6 @@ display: inline-block; margin-bottom: 5px;
 
 </head>
 <body>
-
-<!-- <!--  SIDEBAR (desktop only)  --> -->
-
 <nav class="sidebar">
   <div class="sb-brand">
     <div class="sb-brand-mark">
@@ -1108,12 +1105,7 @@ display: inline-block; margin-bottom: 5px;
 
   <div class="sb-footer">v1.0 · 2025</div>
 </nav>
-
-<!-- <!--  MAIN WRAP  --> -->
-
 <div class="main-wrap">
-
-  <!-- MOBILE TOP NAV (inside main-wrap for proper flow) -->
 
   <div class="mob-topbar" id="mob-topbar" style="display:flex;background:#003F7A;height:52px;align-items:center;padding:0 16px;justify-content:space-between;position:sticky;top:0;z-index:200;flex-shrink:0;">
     <div style="display:flex;align-items:center;gap:8px;">
@@ -1136,8 +1128,6 @@ display: inline-block; margin-bottom: 5px;
     <div class="mob-nav-item" onclick="showPage('storage',this);closeMobMenu()">🗂️ Onde ficam os arquivos</div>
   </div>
 
-  <!-- TOPBAR (desktop) -->
-
   <div class="topbar">
     <div class="tb-group">
       <div class="tb-title" id="tb-title">Nova Catalogação</div>
@@ -1150,18 +1140,12 @@ display: inline-block; margin-bottom: 5px;
     <div class="topbar-accent"></div>
   </div>
 
-  <!-- CONTENT -->
-
   <div class="content">
-
-  <!-- <!--  CATALOGAÇÃO  --> -->
-
   <div class="page active" id="page-catalog">
     <div class="card">
       <div class="cp">
 
 ```
-    <!-- Wizard steps -->
     <div class="wizard">
       <div class="ws active" id="ws1"><div class="ws-n">1</div><div class="ws-l">Identificação</div></div>
       <div class="ws" id="ws2"><div class="ws-n">2</div><div class="ws-l">Fontes</div></div>
@@ -1169,7 +1153,7 @@ display: inline-block; margin-bottom: 5px;
       <div class="ws" id="ws4"><div class="ws-n">4</div><div class="ws-l">Model Card</div></div>
     </div>
 
-    <!-- -- WP1: Identificação -- -->
+    
     <div class="wp active" id="wp1">
       <div class="notice tip">
         <div class="n-ico">👋</div>
@@ -1238,7 +1222,7 @@ display: inline-block; margin-bottom: 5px;
       </div>
     </div>
 
-    <!-- -- WP2: Fontes -- -->
+    
     <div class="wp" id="wp2">
       <div class="notice tip">
         <div class="n-ico">📂</div>
@@ -1290,7 +1274,7 @@ display: inline-block; margin-bottom: 5px;
       </div>
     </div>
 
-    <!-- -- WP3: Análise -- -->
+    
     <div class="wp" id="wp3">
       <div class="awrap">
         <div class="spinner" id="spinner"></div>
@@ -1306,7 +1290,7 @@ display: inline-block; margin-bottom: 5px;
       </div>
     </div>
 
-    <!-- -- WP4: Model Card -- -->
+    
     <div class="wp" id="wp4">
       <div class="sbanner" id="sbanner"><div style="font-size:18px">✅</div><div class="sb-txt" id="sb-txt">—</div></div>
       <div id="mc-container"></div>
@@ -1316,10 +1300,7 @@ display: inline-block; margin-bottom: 5px;
 </div>
 ```
 
-  </div><!-- /page-catalog -->
-
-  <!-- <!--  VALIDAÇÃO  --> -->
-
+  </div>
   <div class="page" id="page-validation">
     <div class="ph">
       <div class="ph-eye">Área de Validação de Modelos</div>
@@ -1346,9 +1327,6 @@ display: inline-block; margin-bottom: 5px;
       </table>
     </div>
   </div>
-
-  <!-- <!--  BI  --> -->
-
   <div class="page" id="page-bi">
     <div class="ph">
       <div class="ph-eye">Painel Executivo</div>
@@ -1410,9 +1388,6 @@ display: inline-block; margin-bottom: 5px;
       </table>
     </div>
   </div>
-
-  <!-- <!--  SAIBA MAIS  --> -->
-
   <div class="page" id="page-saibamais">
     <div class="sm-hero">
       <div class="sm-eye">Guia Completo</div>
@@ -1440,9 +1415,6 @@ display: inline-block; margin-bottom: 5px;
       </div>
     </div>
   </div>
-
-  <!-- <!--  STORAGE  --> -->
-
   <div class="page" id="page-storage">
     <div class="ph">
       <div class="ph-eye">Transparência</div>
@@ -1471,11 +1443,8 @@ display: inline-block; margin-bottom: 5px;
     </div>
   </div>
 
-  </div><!-- /content -->
-</div><!-- /main-wrap -->
-
-<!-- <!--  MODAL VALIDAÇÃO  --> -->
-
+  </div>
+</div>
 <div class="modal-ov" id="val-modal">
   <div class="modal">
     <button class="modal-close" type="button" onclick="closeModal()">×</button>
