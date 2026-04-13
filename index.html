@@ -63,9 +63,9 @@ position: fixed;
 top: 0; left: 0;
 width: var(–nav-w);
 height: 100vh;
-height: 100dvh; /* dynamic viewport on iOS */
+height: 100dvh;
 background: var(–blue-d);
-display: flex;
+display: none;
 flex-direction: column;
 z-index: 200;
 overflow-y: auto;
@@ -74,7 +74,7 @@ overflow-x: hidden;
 }
 
 .main-wrap {
-margin-left: var(–nav-w);
+margin-left: 0;
 min-height: 100vh;
 min-height: 100dvh;
 display: flex;
@@ -88,7 +88,7 @@ z-index: 100;
 height: var(–top-h);
 background: var(–white);
 border-bottom: 1px solid var(–g100);
-display: flex;
+display: none;
 align-items: center;
 padding: 0 32px;
 gap: 16px;
@@ -109,9 +109,11 @@ flex: 1;
 padding: 28px 36px 60px;
 }
 
+/* Mobile content padding reset */
+
 /* ─── MOBILE NAV (bottom bar) ────────────── */
 .mob-topbar {
-display: none;
+display: flex;
 position: sticky;
 top: 0;
 z-index: 200;
@@ -164,7 +166,7 @@ box-shadow: var(–sh-l);
 border-bottom: 2px solid var(–orange);
 }
 
-.mob-nav-drawer.open { display: block; }
+.mob-nav-drawer.open { display: block !important; }
 
 .mob-nav-item {
 display: flex;
@@ -1018,11 +1020,8 @@ display: inline-block; margin-bottom: 5px;
 
 /* ─── RESPONSIVE ─────────────────────────── */
 @media (max-width: 768px) {
-/* Hide desktop sidebar, show mobile nav */
-.sidebar { display: none !important; }
-.main-wrap { margin-left: 0 !important; }
-.topbar { display: none !important; }
-.mob-topbar { display: flex !important; }
+/* Mobile layout */
+.content { padding: 16px 14px 80px; }
 .content { padding: 16px 14px 80px; }
 
 /* All 2-col grids become 1-col on mobile */
@@ -1069,7 +1068,10 @@ display: inline-block; margin-bottom: 5px;
 }
 
 @media (min-width: 769px) {
-/* Hide mobile nav on desktop */
+/* Desktop: show sidebar and topbar, hide mobile nav */
+.sidebar { display: flex !important; }
+.main-wrap { margin-left: var(–nav-w) !important; }
+.topbar { display: flex !important; }
 .mob-topbar { display: none !important; }
 .mob-nav-drawer { display: none !important; }
 }
