@@ -1283,7 +1283,7 @@ RESPONSIVE
     <div class="wpanel active" id="wp1">
       <div class="notice tip">
         <div class="n-ico">👋</div>
-        <div><strong>Olá! Que bom ter você aqui.</strong> Não se preocupe — vamos facilitar ao máximo. Você só precisa preencher informações básicas e indicar onde está a documentação do seu modelo. O resto é com a gente!</div>
+        <div><strong>Olá! Que bom ter você aqui.</strong> Não se preocupe — vamos facilitar ao máximo. Você só precisa preencher as informações básicas abaixo e indicar onde está a documentação do seu modelo. O resto é com a gente! 🚀</div>
       </div>
 
       <div class="grid-2" style="gap:16px;margin-bottom:16px">
@@ -1314,21 +1314,21 @@ RESPONSIVE
         </div>
         <div class="frow" style="margin-bottom:0">
           <div class="field" style="margin:0"><label>Model Owner (seu nome) <span class="req">*</span></label><input type="text" id="model-owner" placeholder="Nome completo"></div>
-          <div class="field" style="margin:0"><label>Seu e-mail <span class="req">*</span></label><input type="email" id="owner-email" placeholder="owner@instituicao.gov.br"></div>
+          <div class="field" style="margin:0"><label>Seu e-mail <span class="req">*</span></label><input type="text" id="owner-email" placeholder="owner@instituicao.gov.br" inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off"></div>
         </div>
       </div>
 
       <div class="card card-pad" style="margin-top:14px">
         <div class="card-title">Contato da Área de Validação</div>
         <div class="frow" style="margin-bottom:0">
-          <div class="field" style="margin:0"><label>E-mail — Área de Validação de Modelos <span class="req">*</span></label><input type="email" id="val-email" placeholder="validacao.modelos@instituicao.gov.br"></div>
-          <div class="field" style="margin:0"><label>E-mail — Comitê de Modelos (opcional)</label><input type="email" id="comite-email" placeholder="comite.modelos@instituicao.gov.br"></div>
+          <div class="field" style="margin:0"><label>E-mail — Área de Validação de Modelos</label><input type="text" id="val-email" placeholder="validacao.modelos@instituicao.gov.br" inputmode="email" autocomplete="email" autocapitalize="off" autocorrect="off"></div>
+          <div class="field" style="margin:0"><label>E-mail — Comitê de Modelos (opcional)</label><input type="text" id="comite-email" placeholder="comite.modelos@instituicao.gov.br" inputmode="email" autocapitalize="off" autocorrect="off"></div>
         </div>
       </div>
 
       <div class="btn-row">
         <div></div>
-        <button class="btn btn-primary" onclick="goStep(2)">Próximo — Fontes →</button>
+        <button class="btn btn-primary" onclick="goStep(2)" style="padding:12px 32px;font-size:15px">Próximo — Fontes →</button>
       </div>
     </div>
 
@@ -1380,7 +1380,7 @@ RESPONSIVE
 
       <div class="btn-row">
         <button class="btn btn-secondary" onclick="goStep(1)">← Voltar</button>
-        <button class="btn btn-primary" onclick="startAnalysis()">Analisar com Agentes →</button>
+        <button class="btn btn-primary" onclick="startAnalysis()" style="padding:12px 32px;font-size:15px">Analisar com Agentes →</button>
       </div>
     </div>
 
@@ -1860,8 +1860,15 @@ function showPage(id, navEl) {
 // ══════════════════════════════════════════════════
 function goStep(n) {
   if(n===2) {
-    const nm=v('model-name'),ar=v('model-area'),ow=v('model-owner'),oe=v('owner-email'),ve=v('val-email');
-    if(!nm||!ar||!ow||!oe||!ve){alert('😅 Ops! Preencha todos os campos obrigatórios (*) para continuar.');return;}
+    const nm=v('model-name'),ar=v('model-area'),ow=v('model-owner'),oe=v('owner-email');
+    if(!nm||!ar||!ow){
+      alert('😅 Ops! Preencha Nome do Modelo, Área e Model Owner para continuar.');
+      return;
+    }
+    if(!oe){
+      alert('Por favor, informe seu e-mail para receber a notificação de conclusão.');
+      return;
+    }
   }
   [1,2,3,4].forEach(i=>{
     el('wp'+i).classList.toggle('active',i===n);
@@ -2127,7 +2134,7 @@ function renderModelCard(r){
           <div class="mtab" onclick="showMsgTab('val',this)">📧 Para Validação de Modelos</div>
         </div>
         <div class="mcontent active" id="mc-owner">
-          <div class="mrec"><div class="mrec-l">Para:</div><input type="email" id="to-owner" value="${v('owner-email')}"></div>
+          <div class="mrec"><div class="mrec-l">Para:</div><input type="text" id="to-owner" value="${v('owner-email')}"></div>
           <div class="mprev">
             <div class="mprev-bar"><div class="mpd mpd1"></div><div class="mpd mpd2"></div><div class="mpd mpd3"></div></div>
             <div class="mto">Para: ${v('owner-email')}</div>
@@ -2136,7 +2143,7 @@ function renderModelCard(r){
           </div>
         </div>
         <div class="mcontent" id="mc-val">
-          <div class="mrec"><div class="mrec-l">Para:</div><input type="email" id="to-val" value="${v('val-email')}"></div>
+          <div class="mrec"><div class="mrec-l">Para:</div><input type="text" id="to-val" value="${v('val-email')}"></div>
           <div class="mprev">
             <div class="mprev-bar"><div class="mpd mpd1"></div><div class="mpd mpd2"></div><div class="mpd mpd3"></div></div>
             <div class="mto">Para: ${v('val-email')}</div>
@@ -2447,7 +2454,13 @@ btn.closest(’.faq-item’).classList.toggle(‘open’);
 // UTILS
 // ══════════════════════════════════════════════════
 function el(id){return document.getElementById(id);}
-function v(id){return (document.getElementById(id)||{}).value?.trim()||’’;}
+function v(id){
+var el=document.getElementById(id);
+if(!el)return ‘’;
+var val=el.value;
+if(val===undefined||val===null)return ‘’;
+return String(val).trim();
+}
 function wait(ms){return new Promise(r=>setTimeout(r,ms));}
 </script>
 
