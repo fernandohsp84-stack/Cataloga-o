@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ModelScan — Catalogação de Modelos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:    #003087;
+  --blue2:   #00206a;
+  --orange:  #F58220;
+  --orange2: #d96f10;
+  --white:   #ffffff;
+  --g50:     #f7f8fa;
+  --g100:    #eef0f4;
+  --g200:    #dde0e8;
+  --g300:    #bcc1cc;
+  --g500:    #7a8194;
+  --g700:    #3d4455;
+  --g900:    #1a1f2e;
+  --green:   #1a7a4a;
+  --green-bg:#eaf4ef;
+  --red:     #b91c1c;
+  --red-bg:  #fef2f2;
+  --yel:     #92640a;
+  --yel-bg:  #fefce8;
+  --r:       6px;
+  --rl:      10px;
+  --sh:      0 1px 4px rgba(0,0,0,0.08);
+  --t:       0.16s ease;
+  --f:       'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100vh;font-size:14px;line-height:1.5;}
+
+/* HEADER */
+.hdr{background:var(–blue);position:sticky;top:0;z-index:200;box-shadow:0 2px 6px rgba(0,48,135,.2);}
+.hdr-inner{max-width:800px;margin:0 auto;padding:0 28px;display:flex;align-items:center;height:54px;gap:16px;}
+.logo-box{width:32px;height:32px;background:var(–white);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-box svg{width:20px;height:20px;}
+.brand{display:flex;flex-direction:column;margin-left:10px;}
+.brand-sup{font-size:9px;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:2px;text-transform:uppercase;}
+.brand-name{font-size:15px;font-weight:700;color:var(–white);letter-spacing:-.2px;}
+.brand-name b{color:var(–orange);}
+.hdr-div{width:1px;height:24px;background:rgba(255,255,255,.12);}
+.hdr-lbl{font-size:12px;color:rgba(255,255,255,.45);font-weight:400;}
+.hdr-sp{flex:1;}
+.hdr-env{background:rgba(245,130,32,.15);border:1px solid rgba(245,130,32,.3);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:600;color:var(–orange);letter-spacing:.8px;text-transform:uppercase;}
+.prog{height:3px;background:var(–blue2);}
+.prog-fill{height:100%;background:var(–orange);transition:width .5s ease;width:10%;}
+
+/* LAYOUT */
+.page{max-width:760px;margin:0 auto;padding:32px 24px 80px;}
+
+/* STEPS */
+.steps{display:flex;align-items:center;margin-bottom:28px;}
+.step{display:flex;align-items:center;gap:7px;flex:1;position:relative;}
+.step:not(:last-child)::after{content:’’;position:absolute;left:calc(28px + 7px);right:0;top:50%;transform:translateY(-50%);height:1px;background:var(–g200);z-index:0;}
+.step.done:not(:last-child)::after{background:var(–blue);}
+.sdot{width:28px;height:28px;border-radius:50%;border:2px solid var(–g200);background:var(–white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(–g300);flex-shrink:0;position:relative;z-index:1;transition:all var(–t);}
+.step.active .sdot{border-color:var(–blue);background:var(–blue);color:var(–white);}
+.step.done .sdot{border-color:var(–blue);background:var(–blue);color:var(–white);}
+.slbl{font-size:11px;font-weight:500;color:var(–g300);}
+.step.active .slbl{color:var(–blue);}
+.step.done .slbl{color:var(–g500);}
+@media(max-width:480px){.slbl{display:none;}}
+
+/* HEADINGS */
+.sh{margin-bottom:20px;}
+.sh h2{font-size:19px;font-weight:700;color:var(–g900);letter-spacing:-.3px;margin-bottom:3px;}
+.sh p{font-size:13px;color:var(–g500);}
+
+/* CARD */
+.card{background:var(–white);border:1px solid var(–g200);border-radius:var(–rl);box-shadow:var(–sh);margin-bottom:14px;overflow:hidden;}
+.cs{padding:18px 22px;border-bottom:1px solid var(–g100);}
+.cs:last-child{border-bottom:none;}
+.cs-ttl{font-size:10px;font-weight:600;color:var(–g300);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+
+/* FORM */
+.f{margin-bottom:13px;}
+.f:last-child{margin-bottom:0;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:500px){.frow{grid-template-columns:1fr;}}
+label{display:block;font-size:11px;font-weight:500;color:var(–g700);margin-bottom:4px;}
+.req{color:var(–orange);margin-left:2px;}
+input[type=text],input[type=url],input[type=password],input[type=email],textarea,select{
+width:100%;border:1px solid var(–g200);border-radius:var(–r);padding:8px 11px;
+font-family:var(–f);font-size:13px;color:var(–g900);background:var(–white);
+transition:border-color var(–t),box-shadow var(–t);outline:none;-webkit-appearance:none;}
+input:focus,textarea:focus,select:focus{border-color:var(–blue);box-shadow:0 0 0 3px rgba(0,48,135,.08);}
+textarea{resize:vertical;min-height:78px;}
+.irow{display:flex;gap:7px;}
+.irow input{flex:1;}
+.krow{display:flex;gap:6px;}
+.krow input{flex:1;font-family:monospace;font-size:12px;}
+.bico{background:var(–g100);border:1px solid var(–g200);border-radius:var(–r);padding:0 10px;cursor:pointer;color:var(–g500);font-size:14px;transition:all var(–t);}
+.bico:hover{background:var(–g200);}
+
+/* SOURCES */
+.srcg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+@media(max-width:500px){.srcg{grid-template-columns:repeat(2,1fr);}}
+.sb{border:1px solid var(–g200);border-radius:var(–r);background:var(–white);padding:9px 7px;cursor:pointer;text-align:center;transition:all var(–t);display:flex;flex-direction:column;align-items:center;gap:4px;user-select:none;}
+.sb:hover{border-color:var(–g300);background:var(–g50);}
+.sb.sel{border-color:var(–blue);background:#f0f4ff;}
+.si{font-size:17px;line-height:1;}
+.sl{font-size:11px;font-weight:500;color:var(–g700);}
+.sb.sel .sl{color:var(–blue);}
+
+/* DROP */
+.dz{border:1.5px dashed var(–g200);border-radius:var(–r);background:var(–g50);padding:22px;text-align:center;cursor:pointer;position:relative;transition:all var(–t);}
+.dz:hover{border-color:var(–blue);background:#f0f4ff;}
+.dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.dl{font-size:12px;color:var(–g500);margin-top:5px;}
+.dh{font-size:11px;color:var(–g300);margin-top:2px;}
+.flist{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+.fi{display:flex;align-items:center;gap:7px;background:var(–g50);border:1px solid var(–g100);border-radius:var(–r);padding:7px 11px;}
+.fii{font-size:13px;flex-shrink:0;}
+.fin{flex:1;font-size:11px;color:var(–g700);font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fis{font-size:10px;color:var(–g300);flex-shrink:0;}
+.frm{background:none;border:none;color:var(–g300);cursor:pointer;font-size:15px;line-height:1;flex-shrink:0;transition:color var(–t);}
+.frm:hover{color:var(–red);}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;}
+.chip{display:flex;align-items:center;gap:4px;background:#f0f4ff;border:1px solid #c9d4f0;border-radius:20px;padding:3px 9px;font-size:11px;color:var(–blue);font-family:monospace;max-width:280px;}
+.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.crm{background:none;border:none;color:rgba(0,48,135,.4);cursor:pointer;font-size:13px;line-height:1;padding:0;flex-shrink:0;transition:color var(–t);}
+.crm:hover{color:var(–red);}
+
+/* NOTICE */
+.notice{display:flex;gap:9px;padding:11px 13px;border-radius:var(–r);border:1px solid;font-size:13px;line-height:1.5;margin-bottom:14px;}
+.notice.info{border-color:#c9d4f0;background:#f0f4ff;color:var(–g700);}
+.notice.warn{border-color:#fcd34d;background:var(–yel-bg);color:var(–yel);}
+.notice.ok  {border-color:#6ee7b7;background:var(–green-bg);color:var(–green);}
+.ni{flex-shrink:0;font-size:14px;margin-top:1px;}
+
+/* BUTTONS */
+.brow{display:flex;align-items:center;justify-content:space-between;padding-top:18px;gap:10px;}
+.btn{border-radius:var(–r);font-family:var(–f);font-size:13px;font-weight:600;cursor:pointer;transition:all var(–t);display:inline-flex;align-items:center;gap:5px;padding:9px 18px;border:none;}
+.btn-p{background:var(–blue);color:var(–white);}
+.btn-p:hover{background:var(–blue2);box-shadow:0 2px 8px rgba(0,48,135,.2);}
+.btn-p:disabled{opacity:.4;cursor:not-allowed;box-shadow:none;}
+.btn-g{background:transparent;color:var(–g500);border:1px solid var(–g200);}
+.btn-g:hover{background:var(–g50);color:var(–g700);}
+.btn-o{background:var(–orange);color:var(–white);}
+.btn-o:hover{background:var(–orange2);}
+.bsm{padding:6px 12px;font-size:11px;font-weight:600;border-radius:var(–r);border:1px solid var(–g200);background:var(–white);color:var(–g700);cursor:pointer;transition:all var(–t);font-family:var(–f);}
+.bsm:hover{border-color:var(–blue);color:var(–blue);}
+
+/* PANEL */
+.panel{display:none;}
+.panel.active{display:block;animation:fu .3s ease both;}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ANALYSIS */
+.awrap{display:flex;flex-direction:column;align-items:center;padding:56px 24px;text-align:center;}
+.spin{width:38px;height:38px;border:3px solid var(–g200);border-top-color:var(–blue);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:18px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+.at{font-size:17px;font-weight:700;margin-bottom:3px;}
+.as{font-size:13px;color:var(–g500);margin-bottom:32px;}
+.asteps{width:100%;max-width:400px;text-align:left;}
+.astep{display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid var(–g100);opacity:.3;transition:opacity .4s;}
+.astep:last-child{border-bottom:none;}
+.astep.active{opacity:1;}
+.astep.done{opacity:.6;}
+.adot{width:7px;height:7px;border-radius:50%;background:var(–g300);margin-top:5px;flex-shrink:0;transition:background .3s;}
+.astep.active .adot{background:var(–orange);box-shadow:0 0 5px rgba(245,130,32,.5);animation:pulse 1s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.astep.done .adot{background:var(–blue);animation:none;}
+.am{font-size:13px;font-weight:500;color:var(–g700);}
+.asb{font-size:11px;color:var(–g300);}
+
+/* MODEL CARD */
+.mc-hdr{background:var(–blue);padding:22px 26px;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;}
+@media(max-width:480px){.mc-hdr{flex-direction:column;}}
+.mc-fam{font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:4px;}
+.mc-nm{font-size:20px;font-weight:700;color:var(–white);letter-spacing:-.3px;line-height:1.2;margin-bottom:3px;}
+.mc-id{font-size:10px;color:rgba(255,255,255,.3);font-family:monospace;}
+.cring{width:56px;height:56px;border-radius:50%;border:2px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:4px;flex-shrink:0;}
+.clv{font-size:15px;font-weight:800;}
+.clx{font-size:7px;letter-spacing:.5px;opacity:.6;}
+.cnm{font-size:9px;font-weight:600;color:rgba(255,255,255,.65);letter-spacing:.5px;text-align:center;}
+.N1{color:#ff6b6b;border-color:#ff6b6b;}
+.N2{color:#ffa554;border-color:#ffa554;}
+.N3{color:#ffd166;border-color:#ffd166;}
+.N4{color:#6bcb8b;border-color:#6bcb8b;}
+.N5{color:rgba(255,255,255,.45);border-color:rgba(255,255,255,.3);}
+
+.mcs{padding:16px 26px;border-bottom:1px solid var(–g100);}
+.mcs:last-child{border-bottom:none;}
+.mcs-lbl{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(–g300);margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.mcs-lbl::after{content:’’;flex:1;height:1px;background:var(–g100);}
+
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:480px){.mg{grid-template-columns:1fr;}}
+.mc{background:var(–g50);border:1px solid var(–g100);border-radius:var(–r);padding:9px 11px;}
+.mcl{font-size:10px;color:var(–g300);margin-bottom:2px;font-weight:500;}
+.mcv{font-size:12px;color:var(–g900);font-weight:500;line-height:1.4;}
+.mcd{font-size:13px;color:var(–g700);line-height:1.7;}
+
+.srows{display:flex;flex-direction:column;gap:7px;}
+.srow{display:flex;align-items:center;gap:9px;}
+.sdim{font-size:11px;color:var(–g500);width:170px;flex-shrink:0;}
+.strk{flex:1;height:4px;background:var(–g100);border-radius:2px;overflow:hidden;}
+.sfil{height:100%;background:var(–blue);border-radius:2px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.sval{font-size:11px;color:var(–g500);width:26px;text-align:right;font-family:monospace;flex-shrink:0;}
+.conf-row{display:flex;align-items:center;gap:9px;margin-top:8px;padding:7px 11px;background:var(–g50);border:1px solid var(–g100);border-radius:var(–r);}
+.cl{font-size:11px;color:var(–g300);}
+.cv{font-size:14px;font-weight:700;color:var(–blue);}
+.ctrk{flex:1;height:3px;background:var(–g100);border-radius:2px;overflow:hidden;}
+.cfil{height:100%;background:var(–blue);border-radius:2px;}
+
+.tags{display:flex;flex-wrap:wrap;gap:5px;}
+.tag{background:var(–g100);border-radius:3px;padding:2px 7px;font-size:11px;font-weight:500;color:var(–g700);}
+
+.ctls{display:flex;flex-direction:column;gap:5px;}
+.ctl{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:var(–r);font-size:12px;line-height:1.5;border-left:3px solid;}
+.ctl.crit{background:var(–red-bg);color:var(–red);border-color:var(–red);}
+.ctl.warn{background:var(–yel-bg);color:var(–yel);border-color:var(–orange);}
+.ctl.ok  {background:var(–green-bg);color:var(–green);border-color:var(–green);}
+.mcsc{font-size:13px;color:var(–g700);line-height:1.7;}
+
+/* MODERATION */
+.mhdr{padding:14px 26px;background:#fffbf5;border-top:3px solid var(–orange);}
+.mt{font-size:13px;font-weight:700;color:var(–g900);margin-bottom:2px;}
+.ms{font-size:12px;color:var(–g500);}
+.mbody{padding:16px 26px;}
+.drow{display:flex;gap:8px;}
+.db{flex:1;padding:9px;border-radius:var(–r);border:1.5px solid var(–g200);background:var(–white);font-family:var(–f);font-size:13px;font-weight:500;cursor:pointer;transition:all var(–t);display:flex;align-items:center;justify-content:center;gap:5px;color:var(–g700);}
+.db.approve:hover,.db.approve.sel{border-color:var(–green);background:var(–green-bg);color:var(–green);}
+.db.reject:hover,.db.reject.sel{border-color:var(–orange);background:#fff7ef;color:var(–orange2);}
+
+.expbar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:var(–g50);border-top:1px solid var(–g100);}
+.explbl{font-size:10px;color:var(–g300);font-weight:500;letter-spacing:.5px;text-transform:uppercase;}
+.expbtns{display:flex;gap:5px;}
+.mcft{padding:9px 18px;text-align:right;font-size:10px;color:var(–g300);font-family:monospace;border-top:1px solid var(–g100);}
+
+/* MSG PANEL */
+.mp-hdr{background:var(–blue);padding:18px 24px;display:flex;align-items:center;gap:11px;}
+.mp-ico{font-size:20px;}
+.mp-t{font-size:15px;font-weight:700;color:var(–white);}
+.mp-s{font-size:11px;color:rgba(255,255,255,.45);}
+.mtabs{display:flex;border-bottom:1px solid var(–g200);background:var(–white);}
+.mtab{padding:11px 18px;font-size:12px;font-weight:600;color:var(–g300);cursor:pointer;border-bottom:2px solid transparent;transition:all var(–t);display:flex;align-items:center;gap:6px;}
+.mtab.active{color:var(–blue);border-bottom-color:var(–blue);}
+.mbadge{background:var(–orange);color:var(–white);border-radius:10px;padding:1px 5px;font-size:9px;font-weight:700;}
+
+.msg-body-wrap{padding:18px 22px;}
+.mcard{background:var(–g50);border:1px solid var(–g200);border-radius:var(–rl);overflow:hidden;margin-bottom:10px;}
+.menv{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(–white);border-bottom:1px solid var(–g100);}
+.menv-ico{font-size:14px;flex-shrink:0;}
+.menv-lbl{font-size:9px;font-weight:600;color:var(–g300);letter-spacing:.8px;text-transform:uppercase;}
+.menv-to{font-size:12px;font-weight:600;color:var(–g700);}
+.mcont{padding:13px 14px;}
+.msubj{font-size:13px;font-weight:700;color:var(–g900);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(–g100);}
+.mbtext{font-size:12px;color:var(–g700);line-height:1.8;white-space:pre-wrap;}
+.macts{padding:12px 22px;border-top:1px solid var(–g100);display:flex;gap:7px;}
+
+/* SUMMARY */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sum-foot{padding:14px 22px;border-top:1px solid var(–g100);display:flex;gap:7px;flex-wrap:wrap;}
+</style>
+
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="logo-box">
+      <svg viewBox="0 0 22 22" fill="none">
+        <rect width="22" height="22" rx="3" fill="#003087"/>
+        <path d="M16 7.5C14.8 6.6 13.2 6 11.4 6C7.9 6 5 8.7 5 12C5 15.3 7.9 18 11.4 18C13.2 18 14.8 17.4 16 16.5L14.2 14.5C13.5 15.1 12.5 15.5 11.4 15.5C9.4 15.5 7.7 13.9 7.7 12C7.7 10.1 9.4 8.5 11.4 8.5C12.5 8.5 13.5 8.9 14.2 9.5L16 7.5Z" fill="#F58220"/>
+      </svg>
+    </div>
+    <div class="brand">
+      <span class="brand-sup">Instituição Financeira</span>
+      <span class="brand-name">Model<b>Scan</b></span>
+    </div>
+    <div class="hdr-div"></div>
+    <div class="hdr-lbl">Catalogação Inteligente de Modelos</div>
+    <div class="hdr-sp"></div>
+    <div class="hdr-env">Validação &amp; Monitoração</div>
+  </div>
+  <div class="prog"><div class="prog-fill" id="pgf"></div></div>
+</header>
+
+<div class="page">
+
+  <!-- STEPS -->
+
+  <div class="steps">
+    <div class="step active" id="stp-1"><div class="sdot">1</div><div><span class="slbl">Identificação</span></div></div>
+    <div class="step" id="stp-2"><div class="sdot">2</div><div><span class="slbl">Fontes</span></div></div>
+    <div class="step" id="stp-3"><div class="sdot">3</div><div><span class="slbl">Análise</span></div></div>
+    <div class="step" id="stp-4"><div class="sdot">4</div><div><span class="slbl">Model Card</span></div></div>
+    <div class="step" id="stp-5"><div class="sdot">5</div><div><span class="slbl">Conclusão</span></div></div>
+  </div>
+
+  <!-- PANEL 1 -->
+
+  <div class="panel active" id="panel-1">
+    <div class="sh"><h2>Identificação do Modelo</h2><p>Dados básicos e autenticação para análise com IA</p></div>
+    <div class="notice info"><div class="ni">🔑</div><div>Informe a chave da API Anthropic para análise real. Deixe em branco para usar o <strong>modo demonstração</strong>.</div></div>
+    <div class="card">
+      <div class="cs">
+        <div class="cs-ttl">Autenticação</div>
+        <div class="f">
+          <label>Chave API Anthropic</label>
+          <div class="krow">
+            <input type="password" id="api-key" placeholder="sk-ant-api03-...">
+            <button class="bico" onclick="toggleKey()">👁</button>
+          </div>
+        </div>
+      </div>
+      <div class="cs">
+        <div class="cs-ttl">Dados do Modelo</div>
+        <div class="f"><label>Nome do Modelo <span class="req">*</span></label><input type="text" id="model-name" placeholder="ex.: Scoring de Crédito PF — Segmento Varejo"></div>
+        <div class="f frow">
+          <div><label>Área / Unidade <span class="req">*</span></label><input type="text" id="model-area" placeholder="ex.: Diretoria de Crédito"></div>
+          <div><label>Model Owner <span class="req">*</span></label><input type="text" id="model-owner" placeholder="Nome completo"></div>
+        </div>
+        <div class="f frow">
+          <div><label>E-mail do Owner <span class="req">*</span></label><input type="email" id="owner-email" placeholder="owner@instituicao.gov.br"></div>
+          <div><label>E-mail — Validação de Modelos <span class="req">*</span></label><input type="email" id="valid-email" placeholder="validacao.modelos@instituicao.gov.br"></div>
+        </div>
+        <div class="f"><label>Descrição Breve (opcional)</label><textarea id="model-desc" placeholder="Finalidade, como é usado, quem consome a saída..."></textarea></div>
+      </div>
+    </div>
+    <div class="brow"><div></div><button class="btn btn-p" onclick="goTo(2)">Próximo — Fontes →</button></div>
+  </div>
+
+  <!-- PANEL 2 -->
+
+  <div class="panel" id="panel-2">
+    <div class="sh"><h2>Fontes de Documentação</h2><p>Selecione as origens e envie os documentos do modelo</p></div>
+    <div class="card">
+      <div class="cs">
+        <div class="cs-ttl">Tipo de Fonte</div>
+        <div class="srcg">
+          <div class="sb" data-s="pdf" onclick="togSrc(this)"><span class="si">📄</span><span class="sl">PDF / Word</span></div>
+          <div class="sb" data-s="sharepoint" onclick="togSrc(this)"><span class="si">☁️</span><span class="sl">SharePoint</span></div>
+          <div class="sb" data-s="databricks" onclick="togSrc(this)"><span class="si">⚡</span><span class="sl">Databricks</span></div>
+          <div class="sb" data-s="gcp" onclick="togSrc(this)"><span class="si">🔵</span><span class="sl">Google Cloud</span></div>
+          <div class="sb" data-s="python" onclick="togSrc(this)"><span class="si">🐍</span><span class="sl">Python / Jupyter</span></div>
+          <div class="sb" data-s="r" onclick="togSrc(this)"><span class="si">📊</span><span class="sl">R / RMarkdown</span></div>
+          <div class="sb" data-s="git" onclick="togSrc(this)"><span class="si">🗂️</span><span class="sl">Git / GitLab</span></div>
+          <div class="sb" data-s="link" onclick="togSrc(this)"><span class="si">🔗</span><span class="sl">Link / URL</span></div>
+        </div>
+      </div>
+      <div class="cs">
+        <div class="cs-ttl">Upload de Documentos</div>
+        <div class="dz" id="dz">
+          <input type="file" id="fi" multiple accept=".pdf,.doc,.docx,.txt,.py,.r,.R,.ipynb,.md,.csv" onchange="handleFiles(this.files)">
+          <div style="font-size:22px;margin-bottom:5px;">⬆</div>
+          <div class="dl">Arraste arquivos ou clique para selecionar</div>
+          <div class="dh">PDF · DOCX · TXT · .py · .R · .ipynb · .md · .csv</div>
+        </div>
+        <div class="flist" id="flist"></div>
+      </div>
+      <div class="cs">
+        <div class="cs-ttl">Links de Repositórios</div>
+        <div class="irow">
+          <input type="url" id="linkin" placeholder="https://sharepoint... ou https://gitlab...">
+          <button class="btn btn-g" style="white-space:nowrap;padding:8px 14px" onclick="addLink()">+ Adicionar</button>
+        </div>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="cs">
+        <div class="cs-ttl">Contexto Adicional</div>
+        <textarea id="ctx" style="min-height:80px" placeholder="Cole trechos de código, especificações técnicas ou outputs do modelo..."></textarea>
+      </div>
+    </div>
+    <div class="brow">
+      <button class="btn btn-g" onclick="goTo(1)">← Voltar</button>
+      <button class="btn btn-p" onclick="startAnalysis()">Analisar com Agentes →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 3 -->
+
+  <div class="panel" id="panel-3">
+    <div class="awrap">
+      <div class="spin" id="spin"></div>
+      <div class="at" id="a-t">Agentes em execução</div>
+      <div class="as" id="a-s">Processando fontes e extraindo metadados do modelo...</div>
+      <div class="asteps">
+        <div class="astep active" id="as1"><div class="adot"></div><div><div class="am">Agente de Ingestão</div><div class="asb">Lendo arquivos e links fornecidos</div></div></div>
+        <div class="astep" id="as2"><div class="adot"></div><div><div class="am">Agente RAG — Extração</div><div class="asb">Respondendo perguntas de catalogação pelas fontes</div></div></div>
+        <div class="astep" id="as3"><div class="adot"></div><div><div class="am">Agente Classificador</div><div class="asb">Identificando família e técnica do modelo</div></div></div>
+        <div class="astep" id="as4"><div class="adot"></div><div><div class="am">Agente de Criticidade</div><div class="asb">Calculando pontuação nas 6 dimensões de risco</div></div></div>
+        <div class="astep" id="as5"><div class="adot"></div><div><div class="am">Geração do Model Card</div><div class="asb">Consolidando ficha para moderação do owner</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4 -->
+
+  <div class="panel" id="panel-4">
+    <div class="sh"><h2>Model Card — Revisão</h2><p>Ficha gerada pelos agentes. Revise, corrija se necessário e confirme.</p></div>
+    <div class="notice warn" id="mod-notice"><div class="ni">⚠️</div><div><strong>Aguardando moderação.</strong> Campos estimados pelos agentes. Corrija o necessário e registre sua decisão ao final.</div></div>
+    <div class="card" id="mc-el">
+      <div class="mc-hdr">
+        <div><div class="mc-fam" id="mc-fam">—</div><div class="mc-nm" id="mc-nm">—</div><div class="mc-id" id="mc-id">—</div></div>
+        <div style="text-align:center;flex-shrink:0;">
+          <div class="cring" id="cring"><div class="clv" id="clv">—</div><div class="clx">NÍVEL</div></div>
+          <div class="cnm" id="cnm">—</div>
+        </div>
+      </div>
+      <div>
+        <div class="mcs"><div class="mcs-lbl">Descrição e Finalidade</div><div class="mcd" id="mc-desc">—</div></div>
+        <div class="mcs">
+          <div class="mcs-lbl">Identificação</div>
+          <div class="mg">
+            <div class="mc"><div class="mcl">Área Responsável</div><div class="mcv" id="mc-area">—</div></div>
+            <div class="mc"><div class="mcl">Model Owner</div><div class="mcv" id="mc-owner">—</div></div>
+            <div class="mc"><div class="mcl">Técnica Principal</div><div class="mcv" id="mc-tech">—</div></div>
+            <div class="mc"><div class="mcl">Plataforma / Ambiente</div><div class="mcv" id="mc-plat">—</div></div>
+            <div class="mc"><div class="mcl">Inputs Principais</div><div class="mcv" id="mc-inp">—</div></div>
+            <div class="mc"><div class="mcl">Outputs / Decisão</div><div class="mcv" id="mc-out">—</div></div>
+            <div class="mc"><div class="mcl">Autonomia Decisória</div><div class="mcv" id="mc-aut">—</div></div>
+            <div class="mc"><div class="mcl">Uso Regulatório</div><div class="mcv" id="mc-reg">—</div></div>
+          </div>
+        </div>
+        <div class="mcs">
+          <div class="mcs-lbl">Pontuação de Criticidade</div>
+          <div class="srows" id="srows"></div>
+          <div class="conf-row"><div class="cl">Confiança da análise</div><div class="cv" id="cv">—%</div><div class="ctrk"><div class="cfil" id="cfil" style="width:0%"></div></div></div>
+        </div>
+        <div class="mcs"><div class="mcs-lbl">Tags</div><div class="tags" id="mc-tags"></div></div>
+        <div class="mcs"><div class="mcs-lbl">Controles Recomendados</div><div class="ctls" id="mc-ctls"></div></div>
+        <div class="mcs"><div class="mcs-lbl">Escopo de Validação</div><div class="mcsc" id="mc-sc">—</div></div>
+        <!-- MOD -->
+        <div class="mhdr"><div class="mt">Moderação do Model Owner</div><div class="ms">Corrija campos se necessário e registre sua decisão</div></div>
+        <div class="mbody">
+          <div class="f frow">
+            <div><label>Corrigir Técnica Principal</label><input type="text" id="mod-tech" placeholder="Confirme ou corrija..."></div>
+            <div><label>Corrigir Autonomia Decisória</label>
+              <select id="mod-aut">
+                <option value="">— manter sugerido —</option>
+                <option>100% automatizado, sem revisão humana</option>
+                <option>Revisão humana apenas em exceções</option>
+                <option>Aprovação humana sistemática</option>
+                <option>Subsídio analítico — decisão é humana</option>
+                <option>Apenas informativo / monitoramento</option>
+              </select>
+            </div>
+          </div>
+          <div class="f"><label>Decisão</label>
+            <div class="drow">
+              <button class="db approve" id="btn-app" onclick="setDec('approve')">✓ Confirmo a ficha</button>
+              <button class="db reject"  id="btn-rej" onclick="setDec('reject')">↩ Solicito revisão</button>
+            </div>
+          </div>
+          <div class="f"><label>Observações</label><textarea id="mod-obs" placeholder="Contexto adicional, correções ou justificativa para revisão..."></textarea></div>
+          <div class="brow" style="border-top:1px solid var(--g100);padding-top:14px;">
+            <button class="btn btn-g" onclick="goTo(2)">← Reenviar Fontes</button>
+            <button class="btn btn-p" id="btn-fin" onclick="finalizeCard()" disabled>Finalizar e Gerar Mensageria →</button>
+          </div>
+        </div>
+        <div class="expbar"><div class="explbl">Exportar</div><div class="expbtns"><button class="bsm" onclick="exportJSON()">JSON</button><button class="bsm" onclick="exportTXT()">TXT</button><button class="bsm" onclick="window.print()">PDF</button></div></div>
+        <div class="mcft" id="mcft">Aguardando moderação do Model Owner</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5 -->
+
+  <div class="panel" id="panel-5">
+    <div class="sh"><h2>Catalogação Concluída</h2><p>Mensagens geradas para o Model Owner e para a Área de Validação de Modelos</p></div>
+    <div class="notice ok" id="concl-notice"><div class="ni">✅</div><div id="concl-txt">Model Card registrado com sucesso.</div></div>
+
+```
+<!-- MESSAGING -->
+<div class="card">
+  <div class="mp-hdr"><div class="mp-ico">✉️</div><div><div class="mp-t">Mensageria de Conclusão</div><div class="mp-s" id="mp-sub">Notificações geradas automaticamente</div></div></div>
+  <div class="mtabs">
+    <div class="mtab active" id="tab-owner" onclick="showTab('owner')">📨 Para o Owner <span class="mbadge">1</span></div>
+    <div class="mtab" id="tab-valid" onclick="showTab('valid')">📋 Para Validação <span class="mbadge">1</span></div>
+  </div>
+  <div id="tb-owner">
+    <div class="msg-body-wrap">
+      <div class="mcard">
+        <div class="menv"><div class="menv-ico">📨</div><div><div class="menv-lbl">Para</div><div class="menv-to" id="mto-ow">—</div></div></div>
+        <div class="mcont"><div class="msubj" id="msj-ow">—</div><div class="mbtext" id="mbt-ow">—</div></div>
+      </div>
+    </div>
+    <div class="macts">
+      <button class="btn btn-p" style="font-size:12px;padding:7px 14px" onclick="copyMsg('owner')">📋 Copiar</button>
+      <button class="btn btn-g" style="font-size:12px;padding:7px 14px" onclick="exportMsgTXT('owner')">⬇ Baixar .txt</button>
+    </div>
+  </div>
+  <div id="tb-valid" style="display:none">
+    <div class="msg-body-wrap">
+      <div class="mcard">
+        <div class="menv"><div class="menv-ico">📋</div><div><div class="menv-lbl">Para</div><div class="menv-to" id="mto-vl">—</div></div></div>
+        <div class="mcont"><div class="msubj" id="msj-vl">—</div><div class="mbtext" id="mbt-vl">—</div></div>
+      </div>
+    </div>
+    <div class="macts">
+      <button class="btn btn-p" style="font-size:12px;padding:7px 14px" onclick="copyMsg('valid')">📋 Copiar</button>
+      <button class="btn btn-g" style="font-size:12px;padding:7px 14px" onclick="exportMsgTXT('valid')">⬇ Baixar .txt</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="card">
+  <div class="cs"><div class="cs-ttl">Resumo do Registro</div><div class="sum-grid" id="sum-grid"></div></div>
+  <div class="sum-foot">
+    <button class="btn btn-p" style="font-size:12px;padding:8px 14px" onclick="exportJSON()">⬇ Model Card JSON</button>
+    <button class="btn btn-g" style="font-size:12px;padding:8px 14px" onclick="exportTXT()">⬇ Model Card TXT</button>
+    <button class="btn btn-o" style="font-size:12px;padding:8px 14px" onclick="newCard()">+ Catalogar Novo Modelo</button>
+  </div>
+</div>
+```
+
+  </div>
+
+</div>
+
+<script>
+const PROG={1:10,2:30,3:60,4:82,5:100};
+const DL={D1_impacto_financeiro:'D1 · Impacto Financeiro',D2_exposicao_regulatoria:'D2 · Exposição Regulatória',D3_autonomia_decisoria:'D3 · Autonomia Decisória',D4_opacidade:'D4 · Opacidade',D5_abrangencia:'D5 · Abrangência',D6_maturidade:'D6 · Maturidade'};
+let files=[],links=[],sources=[],result=null,decision=null;
+const el=id=>document.getElementById(id);
+const v=id=>el(id).value.trim();
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+
+function goTo(s){
+  if(s===2){const n=v('model-name'),a=v('model-area'),o=v('model-owner'),e=v('owner-email'),ve=v('valid-email');if(!n||!a||!o||!e||!ve){alert('Preencha todos os campos obrigatórios (*)');return;}}
+  [1,2,3,4,5].forEach(i=>{
+    el(`panel-${i}`).classList.toggle('active',i===s);
+    const stp=el(`stp-${i}`);
+    stp.classList.toggle('active',i===s);
+    const dot=stp.querySelector('.sdot');
+    if(i<s){stp.classList.add('done');dot.textContent='✓';}
+    else{stp.classList.remove('done');dot.textContent=i;}
+  });
+  el('pgf').style.width=PROG[s]+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleKey(){const i=el('api-key');i.type=i.type==='password'?'text':'password';}
+function togSrc(b){b.classList.toggle('sel');const s=b.dataset.s;sources=b.classList.contains('sel')?[...sources,s]:sources.filter(x=>x!==s);}
+
+function handleFiles(fl){Array.from(fl).forEach(f=>{if(!files.find(x=>x.name===f.name))files.push(f);});renderFiles();}
+function removeFile(i){files.splice(i,1);renderFiles();}
+function renderFiles(){el('flist').innerHTML=files.map((f,i)=>`<div class="fi"><span class="fii">${fIcon(f.name)}</span><span class="fin">${f.name}</span><span class="fis">${fSz(f.size)}</span><button class="frm" onclick="removeFile(${i})">×</button></div>`).join('');}
+function fIcon(n){const e=n.split('.').pop().toLowerCase();return{pdf:'📄',doc:'📝',docx:'📝',py:'🐍',r:'📊',ipynb:'📓',md:'📋',csv:'📊',txt:'📄'}[e]||'📎';}
+function fSz(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
+
+function addLink(){const i=el('linkin'),val=i.value.trim();if(!val)return;if(!links.includes(val)){links.push(val);renderLinks();}i.value='';}
+function removeLink(i){links.splice(i,1);renderLinks();}
+function renderLinks(){el('chips').innerHTML=links.map((l,i)=>`<div class="chip"><span title="${l}">${l}</span><button class="crm" onclick="removeLink(${i})">×</button></div>`).join('');}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  el('linkin').addEventListener('keydown',e=>{if(e.key==='Enter')addLink();});
+  const dz=el('dz');
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.style.borderColor='var(--blue)';});
+  dz.addEventListener('dragleave',()=>{dz.style.borderColor='';});
+  dz.addEventListener('drop',e=>{e.preventDefault();dz.style.borderColor='';handleFiles(e.dataTransfer.files);});
+});
+
+async function startAnalysis(){
+  goTo(3);
+  for(let i=1;i<=5;i++){
+    if(i>1){el(`as${i-1}`).classList.remove('active');el(`as${i-1}`).classList.add('done');}
+    el(`as${i}`).classList.add('active');
+    await delay(i===2?2000:1300);
+  }
+  const key=v('api-key');
+  result=key?await analyzeClaude(key):buildDemo();
+  el('as5').classList.remove('active');el('as5').classList.add('done');
+  el('spin').style.display='none';
+  el('a-t').textContent='Análise concluída';
+  el('a-s').textContent='Model Card gerado. Redirecionando para moderação...';
+  await delay(1000);
+  renderCard(result);
+  goTo(4);
+}
+
+async function analyzeClaude(key){
+  const name=v('model-name'),area=v('model-area'),owner=v('model-owner'),desc=v('model-desc'),ctx=v('ctx');
+  let ftx='';
+  for(const f of files){try{const t=await readText(f);ftx+=`\n\n--- ARQUIVO: ${f.name} ---\n${t.substring(0,3500)}`;}catch(e){}}
+  const prompt=`Você é um agente especializado em catalogação de modelos da Instituição Financeira.
+Analise as informações e retorne APENAS JSON válido, sem texto adicional, sem markdown.
+
+DADOS:
+- Modelo: ${name}
+- Área: ${area}
+- Owner: ${owner}
+- Descrição: ${desc||'(não fornecida)'}
+- Fontes: ${sources.join(', ')||'não especificadas'}
+- Links: ${links.join(', ')||'nenhum'}
+- Contexto: ${ctx||'(nenhum)'}
+${ftx?`\nARQUIVOS:${ftx}`:''}
+
+JSON (estrutura exata, sem markdown):
+{"family":"Estatístico Clássico|Matemático/Financeiro|Especialista/Julgamental|Machine Learning|IA Generativa/LLM","technique":"técnica principal","description":"3-5 frases técnicas","platform":"ambiente inferido","inputs":"variáveis de entrada principais","outputs":"saídas e tipo de decisão","autonomy":"grau de automação","regulatory":"uso regulatório (Basileia III, IFRS 9, CMN 4557, Bacen, Res.4966 ou Nenhum identificado)","scores":{"D1_impacto_financeiro":1,"D2_exposicao_regulatoria":1,"D3_autonomia_decisoria":1,"D4_opacidade":1,"D5_abrangencia":1,"D6_maturidade":1},"weighted_score":0,"criticality_level":"N1","criticality_name":"Crítico","tags":[],"controls":[{"text":"","type":"crit"}],"validation_scope":"escopo de validação recomendado","confidence":50,"confidence_note":"explicação"}`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    const raw=data.content.map(b=>b.text||'').join('');
+    const r=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    r.model_name=v('model-name');r.model_area=v('model-area');r.model_owner=v('model-owner');r.owner_email=v('owner-email');r.valid_email=v('valid-email');
+    return r;
+  }catch(e){console.error(e);const d=buildDemo();d.confidence=0;d.confidence_note='Erro na API. Modo demonstração.';return d;}
+}
+
+function readText(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsText(f);});}
+
+function buildDemo(){
+  return{model_name:v('model-name')||'Modelo Demonstração',model_area:v('model-area')||'Área não informada',model_owner:v('model-owner')||'Owner não informado',owner_email:v('owner-email')||'owner@instituicao.gov.br',valid_email:v('valid-email')||'validacao@instituicao.gov.br',family:'Machine Learning',technique:'Gradient Boosting (XGBoost)',description:'Modelo de machine learning baseado em gradient boosting para estimação de probabilidade de default (PD) em carteiras de crédito pessoa física. Processa variáveis comportamentais, cadastrais e de bureau de crédito gerando score de risco individual. A saída subsidia decisões de concessão e precificação no segmento varejo, com alçada automática definida pela política de crédito vigente.',platform:'Python + Databricks (MLflow Registry)',inputs:'Score bureau externo, histórico de pagamentos, renda declarada, tempo de relacionamento, perfil transacional 12M',outputs:'Score PD (0–1000), faixa de risco (A–G), recomendação de limite',autonomy:'Decisão automática até R$ 50 mil; revisão humana em alçadas superiores',regulatory:'Basileia III — RWA varejo (IRB simplificado) / IFRS 9 — ECL stage assessment',scores:{D1_impacto_financeiro:4,D2_exposicao_regulatoria:4,D3_autonomia_decisoria:4,D4_opacidade:4,D5_abrangencia:5,D6_maturidade:3},weighted_score:4.0,criticality_level:'N1',criticality_name:'Crítico',tags:['crédito-pf','pd-model','varejo','basileia-iii','xgboost','databricks','ifrs9'],controls:[{text:'Monitoramento contínuo de PSI, KS e Gini com alertas mensais e reporte ao Comitê de Modelos',type:'crit'},{text:'Validação independente integral anual com emissão de Nota de Risco de Modelo e rating formal',type:'crit'},{text:'Plano de contingência (fallback model) documentado e testado semestralmente',type:'crit'},{text:'Revisão de viés e disparate impact a cada recalibração ou mudança de política de crédito',type:'warn'},{text:'SHAP values auditáveis para 100% das decisões passíveis de contestação',type:'warn'},{text:'Aprovação formal do Comitê de Modelos antes de qualquer alteração metodológica',type:'ok'}],validation_scope:'Validação Profunda Integral (N1): revisão conceitual completa, auditoria de dados (data leakage, viés amostral), backtesting ≥24 meses, testes de estresse, análise de fairness, explicabilidade (SHAP/LIME), use test e controles compensatórios. Emissão de Nota de Risco de Modelo com rating formal. Frequência: anual + extraordinária a qualquer alteração relevante.',confidence:72,confidence_note:'Confiança moderada-alta: tipo de modelo e uso regulatório identificados. Autonomia e abrangência estimados por contexto institucional.'};
+}
+
+function renderCard(r){
+  const ts=new Date().toLocaleString('pt-BR');
+  el('mc-fam').textContent=r.family;
+  el('mc-nm').textContent=r.model_name;
+  el('mc-id').textContent=`ID: MDL-${Date.now().toString(36).toUpperCase()} · ${ts}`;
+  el('cring').className=`cring ${r.criticality_level}`;
+  el('clv').textContent=r.criticality_level;
+  el('cnm').textContent=r.criticality_name;
+  el('mc-desc').textContent=r.description;
+  el('mc-area').textContent=r.model_area;
+  el('mc-owner').textContent=r.model_owner;
+  el('mc-tech').textContent=r.technique;
+  el('mc-plat').textContent=r.platform;
+  el('mc-inp').textContent=r.inputs;
+  el('mc-out').textContent=r.outputs;
+  el('mc-aut').textContent=r.autonomy;
+  el('mc-reg').textContent=r.regulatory;
+  el('srows').innerHTML=Object.entries(r.scores||{}).map(([k,val])=>`<div class="srow"><div class="sdim">${DL[k]||k}</div><div class="strk"><div class="sfil" style="width:${(val/5)*100}%"></div></div><div class="sval">${val}/5</div></div>`).join('');
+  const c=r.confidence||50;
+  el('cv').textContent=c+'%';
+  el('cfil').style.width=c+'%';
+  el('mc-tags').innerHTML=(r.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+  el('mc-ctls').innerHTML=(r.controls||[]).map(c=>`<div class="ctl ${c.type||''}">${c.text}</div>`).join('');
+  el('mc-sc').textContent=r.validation_scope;
+  el('mcft').textContent=`Gerado automaticamente em ${ts} · Aguardando moderação`;
+}
+
+function setDec(d){decision=d;el('btn-app').classList.toggle('sel',d==='approve');el('btn-rej').classList.toggle('sel',d==='reject');el('btn-fin').disabled=false;}
+
+function finalizeCard(){
+  if(!decision||!result)return;
+  const techOvr=v('mod-tech'),autOvr=el('mod-aut').value,obs=v('mod-obs');
+  if(techOvr)result.technique=techOvr;
+  if(autOvr)result.autonomy=autOvr;
+  result.moderation={decision,observations:obs,moderatedAt:new Date().toISOString()};
+  const ts=new Date().toLocaleString('pt-BR');
+  const ok=decision==='approve';
+  el('mcft').textContent=`${ok?'CONFIRMADA':'REVISÃO SOLICITADA'} pelo Model Owner — ${result.model_owner} — ${ts}`;
+  el('mod-notice').style.display='none';
+  el('btn-fin').disabled=true;
+  el('btn-fin').textContent=ok?'✓ Registrado':'↩ Revisão solicitada';
+  genMessages();
+  renderSummary();
+  goTo(5);
+}
+
+function genMessages(){
+  if(!result)return;
+  const r=result,ts=new Date().toLocaleString('pt-BR'),ok=r.moderation?.decision==='approve',obs=r.moderation?.observations||'';
+  const toOw=`${r.model_owner} <${r.owner_email}>`;
+  const sjOw=`[ModelScan] ${ok?'Catalogação concluída':'Revisão solicitada'} — ${r.model_name}`;
+  const btOw=ok
+?`Prezado(a) ${r.model_owner},
+
+Seu modelo foi catalogado com sucesso no inventário institucional da Instituição Financeira.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RESUMO DA FICHA REGISTRADA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Modelo:          ${r.model_name}
+Área:            ${r.model_area}
+Família:         ${r.family}
+Técnica:         ${r.technique}
+Plataforma:      ${r.platform}
+Nível:           ${r.criticality_level} — ${r.criticality_name}
+Pontuação:       ${r.weighted_score}
+Regulatório:     ${r.regulatory}
+Autonomia:       ${r.autonomy}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRÓXIMOS PASSOS
+A ficha foi encaminhada à Área de Validação e Monitoração de Modelos para enfileiramento conforme criticidade ${r.criticality_level}. O prazo e o escopo da validação seguem o Programa de Gestão de Risco de Modelo vigente.
+
+Para ajustes nos dados registrados, entre em contato com a área de validação informando o número do modelo.
+
+Esta mensagem foi gerada automaticamente pelo ModelScan — Instituição Financeira.
+Registrado em: ${ts}`
+:`Prezado(a) ${r.model_owner},
+
+A revisão do Model Card do seu modelo foi solicitada. A ficha retornará à Área de Validação e Monitoração para ajustes antes de ser incluída no inventário oficial.
+
+Modelo:    ${r.model_name}
+Motivo:    ${obs||'Não especificado — verificar junto à área de validação.'}
+
+Você será notificado(a) quando a ficha revisada estiver disponível para nova moderação.
+
+Esta mensagem foi gerada automaticamente pelo ModelScan — Instituição Financeira.
+Solicitado em: ${ts}`;
+
+  const toVl=`Área de Validação e Monitoração de Modelos <${r.valid_email}>`;
+  const sjVl=`[ModelScan] ${ok?`Novo modelo na fila de validação — ${r.criticality_level} — `:`Revisão pendente — `}${r.model_name}`;
+  const btVl=ok
+?`Equipe de Validação e Monitoração de Modelos,
+
+Um novo modelo foi catalogado e confirmado pelo Model Owner. Segue ficha completa para enfileiramento e priorização.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FICHA DO MODELO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nome:       ${r.model_name}
+Área:       ${r.model_area}
+Owner:      ${r.model_owner} (${r.owner_email})
+Família:    ${r.family}
+Técnica:    ${r.technique}
+Plataforma: ${r.platform}
+Nível:      ${r.criticality_level} — ${r.criticality_name}
+Pontuação:  ${r.weighted_score} (ponderada 6 dimensões)
+Confiança:  ${r.confidence}%
+Inputs:     ${r.inputs}
+Outputs:    ${r.outputs}
+Autonomia:  ${r.autonomy}
+Regulat.:   ${r.regulatory}
+Tags:       ${(r.tags||[]).join(', ')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ESCOPO DE VALIDAÇÃO RECOMENDADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${r.validation_scope}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONTROLES RECOMENDADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${(r.controls||[]).map((c,i)=>`${i+1}. [${c.type.toUpperCase()}] ${c.text}`).join('\n')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${r.criticality_level==='N1'||r.criticality_level==='N2'?`⚠ CRITICIDADE ${r.criticality_level} — PRIORIZAR alocação de recurso de validação.\n`:''}Ação requerida: Incluir na fila de validação conforme criticidade ${r.criticality_level}.
+
+Esta mensagem foi gerada automaticamente pelo ModelScan — Instituição Financeira.
+Catalogado em: ${ts}`
+:`Equipe de Validação e Monitoração de Modelos,
+
+O Model Owner solicitou revisão do Model Card abaixo. A ficha não foi confirmada e requer ajustes antes de seguir para validação.
+
+Modelo:  ${r.model_name}
+Área:    ${r.model_area}
+Owner:   ${r.model_owner} (${r.owner_email})
+Nível:   ${r.criticality_level} — ${r.criticality_name}
+
+OBSERVAÇÕES DO OWNER:
+${obs||'Não especificado.'}
+
+Ação requerida: Revisar a ficha e retornar ao Model Owner para nova confirmação.
+
+Esta mensagem foi gerada automaticamente pelo ModelScan — Instituição Financeira.
+Solicitado em: ${ts}`;
+
+  el('mto-ow').textContent=toOw;el('msj-ow').textContent=sjOw;el('mbt-ow').textContent=btOw;
+  el('mto-vl').textContent=toVl;el('msj-vl').textContent=sjVl;el('mbt-vl').textContent=btVl;
+  el('mp-sub').textContent=`${r.model_name} · ${r.criticality_level} — ${r.criticality_name} · ${new Date().toLocaleString('pt-BR')}`;
+  window._msgs={owner:{to:toOw,subject:sjOw,body:btOw},valid:{to:toVl,subject:sjVl,body:btVl}};
+}
+
+function showTab(t){['owner','valid'].forEach(x=>{el(`tab-${x}`).classList.toggle('active',x===t);el(`tb-${x}`).style.display=x===t?'block':'none';});}
+
+function copyMsg(t){if(!window._msgs)return;const m=window._msgs[t];const txt=`Para: ${m.to}\nAssunto: ${m.subject}\n\n${m.body}`;navigator.clipboard.writeText(txt).then(()=>alert('Mensagem copiada!')).catch(()=>alert('Copie manualmente.'));}
+function exportMsgTXT(t){if(!window._msgs)return;const m=window._msgs[t];dlBlob(new Blob([`Para: ${m.to}\nAssunto: ${m.subject}\n\n${m.body}`],{type:'text/plain;charset=utf-8'}),`msg-${t}-${san(result?.model_name)}.txt`);}
+
+function renderSummary(){
+  if(!result)return;const r=result,ok=r.moderation?.decision==='approve';
+  el('sum-grid').innerHTML=`
+    <div class="mc"><div class="mcl">Modelo</div><div class="mcv">${r.model_name}</div></div>
+    <div class="mc"><div class="mcl">Criticidade</div><div class="mcv">${r.criticality_level} — ${r.criticality_name}</div></div>
+    <div class="mc"><div class="mcl">Família</div><div class="mcv">${r.family}</div></div>
+    <div class="mc"><div class="mcl">Pontuação Ponderada</div><div class="mcv">${r.weighted_score}</div></div>
+    <div class="mc"><div class="mcl">Status</div><div class="mcv" style="color:${ok?'var(--green)':'var(--orange)'}">${ok?'✓ Confirmado pelo Owner':'↩ Revisão solicitada'}</div></div>
+    <div class="mc"><div class="mcl">Confiança da Análise</div><div class="mcv">${r.confidence}%</div></div>`;
+  el('concl-txt').textContent=ok?`Model Card de "${r.model_name}" registrado (${r.criticality_level} — ${r.criticality_name}). Notificações geradas para o Owner e para a Área de Validação.`:`Revisão solicitada para "${r.model_name}". Ficha retorna à equipe de validação.`;
+}
+
+function exportJSON(){if(!result)return;dlBlob(new Blob([JSON.stringify(result,null,2)],{type:'application/json'}),`model-card-${san(result.model_name)}.json`);}
+function exportTXT(){
+  if(!result)return;const r=result;
+  const t=[`MODEL CARD — ${r.model_name}`,'─'.repeat(56),`Área: ${r.model_area}`,`Owner: ${r.model_owner}`,`Criticidade: ${r.criticality_level} — ${r.criticality_name}`,`Pontuação: ${r.weighted_score}`,``,`Família: ${r.family}`,`Técnica: ${r.technique}`,`Plataforma: ${r.platform}`,``,`Descrição:`,r.description,``,`Inputs: ${r.inputs}`,`Outputs: ${r.outputs}`,`Autonomia: ${r.autonomy}`,`Regulatório: ${r.regulatory}`,``,`Pontuação por dimensão:`,...Object.entries(r.scores||{}).map(([k,v])=>`  ${DL[k]||k}: ${v}/5`),``,`Confiança: ${r.confidence}%`,``,`Controles:`,...(r.controls||[]).map(c=>`  [${c.type.toUpperCase()}] ${c.text}`),``,`Escopo de validação:`,r.validation_scope,``,`Tags: ${(r.tags||[]).join(', ')}`,`Gerado: ${new Date().toLocaleString('pt-BR')}`];
+  dlBlob(new Blob([t.join('\n')],{type:'text/plain;charset=utf-8'}),`model-card-${san(r.model_name)}.txt`);
+}
+function dlBlob(b,n){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click();URL.revokeObjectURL(a.href);}
+function san(s){return(s||'modelo').toLowerCase().replace(/[^a-z0-9]/g,'-').substring(0,40);}
+function newCard(){
+  files=[];links=[];sources=[];result=null;decision=null;
+  ['model-name','model-area','model-owner','owner-email','valid-email','model-desc','ctx','mod-tech','mod-obs'].forEach(id=>{const e=el(id);if(e)e.value='';});
+  document.querySelectorAll('.sb.sel').forEach(b=>b.classList.remove('sel'));
+  el('flist').innerHTML='';el('chips').innerHTML='';
+  el('btn-fin').disabled=true;el('btn-fin').textContent='Finalizar e Gerar Mensageria →';
+  el('btn-app').classList.remove('sel');el('btn-rej').classList.remove('sel');
+  el('mod-notice').style.display='';
+  goTo(1);
+}
+</script>
+
+</body>
+</html>
