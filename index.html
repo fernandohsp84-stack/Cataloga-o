@@ -31,7 +31,7 @@ body{font-family:var(--font);background:var(--off);color:var(--g900);font-size:1
 
 /* DROPDOWN MENU */
 #nav-drawer{display:none;background:var(–blue-d);border-bottom:3px solid var(–orange);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
-#nav-drawer.open{display:block;}
+#nav-drawer.open{display:block!important;}
 .nav-btn{display:block;width:100%;text-align:left;padding:14px 20px;background:none;border:none;border-left:3px solid transparent;color:rgba(255,255,255,0.7);font-family:var(–font);font-size:14px;cursor:pointer;-webkit-appearance:none;}
 .nav-btn:active,.nav-btn.active{background:rgba(255,255,255,0.1);border-left-color:var(–orange);color:#fff;}
 
@@ -43,7 +43,7 @@ body{font-family:var(--font);background:var(--off);color:var(--g900);font-size:1
 .pg.on{display:block;}
 
 /* WIZARD STEPS */
-#wizard{display:flex;overflow-x:auto;background:var(–off);border-bottom:1px solid var(–g200);margin:0 0 20px 0;padding:0 4px;border-radius:8px 8px 0 0;-webkit-overflow-scrolling:touch;}
+#wizard{display:flex;overflow-x:auto;background:var(–off);border-bottom:1px solid var(–g200);margin:-18px -18px 20px -18px;padding:0 18px;border-radius:12px 12px 0 0;-webkit-overflow-scrolling:touch;}
 .ws{display:flex;align-items:center;gap:7px;padding:13px 10px 11px;flex-shrink:0;border-bottom:2px solid transparent;cursor:default;}
 .ws.on{border-bottom-color:var(–blue);}
 .ws.dn{border-bottom-color:var(–green);}
@@ -59,7 +59,7 @@ body{font-family:var(--font);background:var(--off);color:var(--g900);font-size:1
 .wp.on{display:block;}
 
 /* CARD */
-.card{background:var(–white);border:1px solid var(–g200);border-radius:12px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
+.card{background:var(–white);border:1px solid var(–g200);border-radius:12px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,0.07);overflow:hidden;}
 .cp{padding:18px;}
 .ct{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(–g300);margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(–g100);}
 
@@ -298,7 +298,7 @@ textarea{resize:vertical;min-height:88px;line-height:1.6;}
 /* DESKTOP SIDEBAR LAYOUT */
 @media(min-width:769px){
 body{display:flex;}
-#topbar,#nav-drawer{display:none!important;}
+#topbar{display:none!important;}
 #sidebar{display:flex;flex-direction:column;width:240px;min-width:240px;background:var(–blue-d);min-height:100vh;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;}
 #main{flex:1;min-width:0;display:flex;flex-direction:column;}
 #desktop-topbar{display:flex;align-items:center;padding:0 28px;height:54px;background:var(–white);border-bottom:1px solid var(–g100);box-shadow:0 1px 0 var(–g100);flex-shrink:0;position:sticky;top:0;z-index:50;}
