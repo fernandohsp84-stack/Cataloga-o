@@ -4,793 +4,697 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ModelScan — Catalogacao v2.1</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>ModelScan</title>
 <style>
-:root {
-  --blue:#005CA9; --blue-d:#003F7A; --blue-l:#EBF3FB;
-  --orange:#F47920; --white:#fff; --off:#F5F6F8;
-  --g100:#ECEEF2; --g200:#D8DCE5; --g300:#B8BEC9;
-  --g500:#717A8C; --g700:#3C4353; --g900:#1A1D23;
-  --green:#1B7F4F; --grn-l:#E6F4EE;
-  --red:#B83232; --red-l:#FBECEC;
-  --amber:#9A6200; --amb-l:#FDF5E6;
-  --teal:#0D7377; --tea-l:#E5F3F4;
-  --font:'DM Sans',system-ui,sans-serif;
-  --mono:'DM Mono','Courier New',monospace;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--font);background:var(--off);color:var(--g900);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F5F6F8; color: #1A1D23; font-size: 15px; }
 
-/* TOPBAR */
-#topbar{display:flex;align-items:center;justify-content:space-between;background:var(–blue-d);height:52px;padding:0 16px;position:sticky;top:0;z-index:100;}
-#topbar-brand{display:flex;align-items:center;gap:10px;}
-#topbar-icon{width:30px;height:30px;background:var(–orange);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-#topbar-name{font-size:18px;font-weight:600;color:#fff;letter-spacing:-0.3px;}
-#menu-btn{background:rgba(255,255,255,0.12);border:none;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;-webkit-appearance:none;}
+/* HEADER */
+.hdr { display: flex; align-items: center; justify-content: space-between; background: #003F7A; padding: 0 16px; height: 54px; position: sticky; top: 0; z-index: 99; }
+.hdr-brand { display: flex; align-items: center; gap: 10px; }
+.hdr-icon { width: 30px; height: 30px; background: #F47920; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.hdr-name { font-size: 18px; font-weight: 700; color: #fff; }
+.hdr-btn { background: rgba(255,255,255,.15); border: none; border-radius: 7px; width: 38px; height: 38px; color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-/* DROPDOWN MENU */
-#nav-drawer{display:none;background:var(–blue-d);border-bottom:3px solid var(–orange);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
-#nav-drawer.open{display:block!important;}
-.nav-btn{display:block;width:100%;text-align:left;padding:14px 20px;background:none;border:none;border-left:3px solid transparent;color:rgba(255,255,255,0.7);font-family:var(–font);font-size:14px;cursor:pointer;-webkit-appearance:none;}
-.nav-btn:active,.nav-btn.active{background:rgba(255,255,255,0.1);border-left-color:var(–orange);color:#fff;}
-
-/* CONTENT */
-#content{padding:20px 16px 80px;}
+/* DROPDOWN */
+.menu { display: none; background: #003F7A; border-bottom: 3px solid #F47920; }
+.menu.open { display: block; }
+.mitem { display: block; width: 100%; text-align: left; padding: 14px 20px; background: none; border: none; border-left: 3px solid transparent; color: rgba(255,255,255,.75); font-size: 15px; font-family: inherit; cursor: pointer; }
+.mitem.act { background: rgba(255,255,255,.1); border-left-color: #F47920; color: #fff; font-weight: 600; }
 
 /* PAGES */
-.pg{display:none;}
-.pg.on{display:block;}
+.pg { display: none; padding: 18px 14px 80px; }
+.pg.on { display: block; }
 
-/* WIZARD STEPS */
-#wizard{display:flex;overflow-x:auto;background:var(–off);border-bottom:1px solid var(–g200);margin:-18px -18px 20px -18px;padding:0 18px;border-radius:12px 12px 0 0;-webkit-overflow-scrolling:touch;}
-.ws{display:flex;align-items:center;gap:7px;padding:13px 10px 11px;flex-shrink:0;border-bottom:2px solid transparent;cursor:default;}
-.ws.on{border-bottom-color:var(–blue);}
-.ws.dn{border-bottom-color:var(–green);}
-.ws-num{width:20px;height:20px;border-radius:50%;border:1.5px solid var(–g300);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(–g300);}
-.ws.on .ws-num{border-color:var(–blue);color:var(–blue);}
-.ws.dn .ws-num{border-color:var(–green);background:var(–green);color:#fff;}
-.ws-lbl{font-size:12px;font-weight:500;color:var(–g300);white-space:nowrap;}
-.ws.on .ws-lbl{color:var(–blue);font-weight:600;}
-.ws.dn .ws-lbl{color:var(–green);}
+/* STEPS */
+.steps { display: flex; overflow-x: auto; background: #fff; border-bottom: 1px solid #DDE1E9; margin-bottom: 16px; padding: 0; -webkit-overflow-scrolling: touch; }
+.step { display: flex; align-items: center; gap: 8px; padding: 14px 12px; flex-shrink: 0; border-bottom: 2px solid transparent; }
+.step.on { border-bottom-color: #005CA9; }
+.step.dn { border-bottom-color: #1B7F4F; }
+.step-n { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #B8BEC9; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #B8BEC9; flex-shrink: 0; }
+.step.on .step-n { border-color: #005CA9; color: #005CA9; }
+.step.dn .step-n { border-color: #1B7F4F; background: #1B7F4F; color: #fff; }
+.step-l { font-size: 13px; font-weight: 500; color: #B8BEC9; white-space: nowrap; }
+.step.on .step-l { color: #005CA9; font-weight: 700; }
+.step.dn .step-l { color: #1B7F4F; }
 
-/* WIZARD PANELS */
-.wp{display:none;}
-.wp.on{display:block;}
+/* PANELS */
+.pnl { display: none; }
+.pnl.on { display: block; }
 
 /* CARD */
-.card{background:var(–white);border:1px solid var(–g200);border-radius:12px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,0.07);overflow:hidden;}
-.cp{padding:18px;}
-.ct{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(–g300);margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(–g100);}
+.card { background: #fff; border: 1px solid #DDE1E9; border-radius: 12px; margin-bottom: 14px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+.card-t { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: #B8BEC9; margin-bottom: 12px; padding-bottom: 9px; border-bottom: 1px solid #ECEEF2; }
 
 /* NOTICE */
-.notice{display:flex;gap:10px;padding:12px 14px;border-radius:8px;border:1px solid;font-size:13px;line-height:1.6;margin-bottom:16px;}
-.n-tip{background:var(–tea-l);border-color:rgba(13,115,119,0.2);color:var(–teal);}
-.n-info{background:var(–blue-l);border-color:rgba(0,92,169,0.2);color:var(–blue-d);}
-.n-ok{background:var(–grn-l);border-color:rgba(27,127,79,0.2);color:var(–green);}
-.n-warn{background:var(–amb-l);border-color:rgba(154,98,0,0.2);color:var(–amber);}
-.n-ico{flex-shrink:0;font-size:16px;}
+.tip { display: flex; gap: 10px; padding: 12px 14px; border-radius: 8px; background: #E5F3F4; border: 1px solid rgba(13,115,119,.2); color: #0D7377; font-size: 13px; line-height: 1.6; margin-bottom: 14px; }
 
 /* FORM */
-.field{margin-bottom:14px;}
-.field:last-child{margin-bottom:0;}
-label{display:block;font-size:12px;font-weight:500;color:var(–g500);margin-bottom:5px;}
-.req{color:var(–orange);margin-left:2px;}
-input,textarea,select{width:100%;border:1.5px solid var(–g200);border-radius:6px;padding:11px 13px;font-family:var(–font);font-size:14px;color:var(–g900);background:var(–white);outline:none;-webkit-appearance:none;appearance:none;}
-input:focus,textarea:focus,select:focus{border-color:var(–blue);box-shadow:0 0 0 3px rgba(0,92,169,0.1);}
-textarea{resize:vertical;min-height:88px;line-height:1.6;}
-.key-row{display:flex;gap:8px;}
-.key-row input{flex:1;font-family:var(–mono);font-size:12px;}
-.eye-btn{background:var(–off);border:1.5px solid var(–g200);border-radius:6px;padding:0 12px;cursor:pointer;color:var(–g300);font-size:14px;-webkit-appearance:none;flex-shrink:0;}
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+label { display: block; font-size: 12px; font-weight: 600; color: #717A8C; margin-bottom: 5px; }
+.req { color: #F47920; }
+input, textarea, select { width: 100%; border: 2px solid #D8DCE5; border-radius: 8px; padding: 12px 13px; font-size: 15px; color: #1A1D23; background: #fff; font-family: inherit; -webkit-appearance: none; appearance: none; outline: none; }
+input:focus, textarea:focus { border-color: #005CA9; box-shadow: 0 0 0 3px rgba(0,92,169,.12); }
+textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+.key-row { display: flex; gap: 8px; }
+.key-row input { flex: 1; font-size: 13px; }
+.eye { background: #F5F6F8; border: 2px solid #D8DCE5; border-radius: 8px; padding: 0 13px; cursor: pointer; font-size: 16px; -webkit-appearance: none; flex-shrink: 0; }
 
 /* GRID */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
-@media(max-width:500px){.g2{grid-template-columns:1fr;}.g4{grid-template-columns:1fr 1fr;}}
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+@media(max-width:480px) { .g2 { grid-template-columns: 1fr; } .g4 { grid-template-columns: 1fr 1fr; } }
 
-/* SOURCES */
-.src-tile{border:1.5px solid var(–g200);border-radius:8px;padding:12px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;background:var(–white);user-select:none;-webkit-user-select:none;touch-action:manipulation;}
-.src-tile.sel{border-color:var(–blue);background:var(–blue-l);}
-.src-ico{font-size:20px;line-height:1;}
-.src-lbl{font-size:10px;font-weight:500;color:var(–g500);text-align:center;}
-.src-tile.sel .src-lbl{color:var(–blue);}
+/* SOURCE TILES */
+.tile { border: 2px solid #D8DCE5; border-radius: 8px; padding: 12px 6px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; background: #fff; -webkit-user-select: none; user-select: none; }
+.tile.sel { border-color: #005CA9; background: #EBF3FB; }
+.tile-i { font-size: 20px; }
+.tile-l { font-size: 10px; font-weight: 600; color: #717A8C; text-align: center; }
+.tile.sel .tile-l { color: #005CA9; }
 
 /* UPLOAD */
-.upz{border:1.5px dashed var(–g300);border-radius:10px;padding:24px 16px;text-align:center;cursor:pointer;position:relative;background:var(–off);}
-.upz input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.upz-t{font-size:13px;color:var(–g500);margin:8px 0 3px;}
-.upz-h{font-size:11px;color:var(–g300);font-family:var(–mono);}
-.flist{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
-.fi{display:flex;align-items:center;gap:8px;background:var(–off);border:1px solid var(–g100);border-radius:6px;padding:8px 12px;}
-.fi-nm{flex:1;font-family:var(–mono);font-size:11px;color:var(–g500);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.fi-sz{font-family:var(–mono);font-size:11px;color:var(–g300);flex-shrink:0;}
-.fi-rm{background:none;border:none;color:var(–g300);cursor:pointer;font-size:18px;line-height:1;-webkit-appearance:none;}
-.lrow{display:flex;gap:8px;margin-bottom:8px;}
-.lrow input{flex:1;}
-.add-link-btn{background:var(–off);border:1.5px solid var(–g200);border-radius:6px;padding:0 14px;color:var(–g500);font-size:13px;font-family:var(–font);cursor:pointer;white-space:nowrap;-webkit-appearance:none;}
-.chips{display:flex;flex-wrap:wrap;gap:6px;}
-.chip{display:flex;align-items:center;gap:5px;background:var(–blue-l);border:1px solid rgba(0,92,169,0.2);border-radius:20px;padding:3px 10px 3px 12px;font-family:var(–mono);font-size:11px;color:var(–blue);}
-.chip-t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;}
-.chip-r{background:none;border:none;color:rgba(0,92,169,0.4);cursor:pointer;font-size:16px;line-height:1;-webkit-appearance:none;}
+.upz { border: 2px dashed #B8BEC9; border-radius: 10px; padding: 24px 16px; text-align: center; position: relative; background: #F5F6F8; }
+.upz input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.upz-t { font-size: 13px; color: #717A8C; margin: 8px 0 3px; }
+.upz-h { font-size: 11px; color: #B8BEC9; }
+.flist { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.fi { display: flex; align-items: center; gap: 8px; background: #F5F6F8; border: 1px solid #ECEEF2; border-radius: 6px; padding: 8px 11px; }
+.fi-n { flex: 1; font-size: 11px; color: #717A8C; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fi-r { background: none; border: none; color: #B8BEC9; font-size: 18px; cursor: pointer; line-height: 1; -webkit-appearance: none; }
+.lrow { display: flex; gap: 8px; margin-bottom: 8px; }
+.lrow input { flex: 1; }
+.ladd { background: #F5F6F8; border: 2px solid #D8DCE5; border-radius: 8px; padding: 0 14px; font-size: 14px; font-family: inherit; cursor: pointer; -webkit-appearance: none; color: #717A8C; white-space: nowrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: flex; align-items: center; gap: 5px; background: #EBF3FB; border: 1px solid rgba(0,92,169,.2); border-radius: 20px; padding: 3px 10px 3px 12px; font-size: 11px; color: #005CA9; max-width: 90%; }
+.chip-t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip-r { background: none; border: none; color: rgba(0,92,169,.4); cursor: pointer; font-size: 16px; line-height: 1; -webkit-appearance: none; }
 
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 22px;border:none;border-radius:8px;font-family:var(–font);font-size:14px;font-weight:600;cursor:pointer;-webkit-appearance:none;touch-action:manipulation;}
-.btn-p{background:var(–blue);color:#fff;}
-.btn-p:active{background:var(–blue-d);}
-.btn-p:disabled{opacity:0.4;cursor:not-allowed;}
-.btn-s{background:var(–white);color:var(–g700);border:1.5px solid var(–g200);}
-.btn-row{display:flex;align-items:center;justify-content:space-between;margin-top:22px;gap:10px;}
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 13px 24px; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; -webkit-appearance: none; touch-action: manipulation; }
+.btn-p { background: #005CA9; color: #fff; width: 100%; }
+.btn-p:active { background: #003F7A; }
+.btn-s { background: #fff; color: #3C4353; border: 2px solid #D8DCE5; }
+.btn-row { display: flex; gap: 10px; margin-top: 20px; }
+.btn-row .btn-s { flex: 0 0 auto; }
+.btn-row .btn-p { flex: 1; }
 
 /* ANALYSIS */
-.awrap{text-align:center;padding:52px 0;}
-.spinner{width:40px;height:40px;border:3px solid var(–g100);border-top-color:var(–blue);border-radius:50%;margin:0 auto 22px;animation:spin 0.8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.awrap h3{font-size:20px;font-weight:600;color:var(–g900);margin-bottom:6px;}
-.awrap p{font-size:13px;color:var(–g500);margin-bottom:28px;}
-.asteps{max-width:380px;margin:0 auto;text-align:left;}
-.as{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(–g100);opacity:0.3;transition:opacity 0.3s;}
-.as:last-child{border-bottom:none;}
-.as.on{opacity:1;} .as.dn{opacity:0.6;}
-.as-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;background:var(–g300);flex-shrink:0;}
-.as.on .as-dot{background:var(–blue);box-shadow:0 0 0 3px rgba(0,92,169,0.15);}
-.as.dn .as-dot{background:var(–green);}
-.as-l{font-size:13px;font-weight:500;color:var(–g900);}
-.as-s{font-size:12px;color:var(–g300);margin-top:2px;}
+.awrap { text-align: center; padding: 48px 0; }
+.spin { width: 44px; height: 44px; border: 4px solid #ECEEF2; border-top-color: #005CA9; border-radius: 50%; margin: 0 auto 20px; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.awrap h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.awrap p { font-size: 14px; color: #717A8C; margin-bottom: 28px; }
+.astep { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #ECEEF2; opacity: .3; transition: opacity .3s; }
+.astep:last-child { border: none; }
+.astep.on { opacity: 1; }
+.astep.dn { opacity: .65; }
+.adot { width: 8px; height: 8px; border-radius: 50%; background: #B8BEC9; margin-top: 5px; flex-shrink: 0; }
+.astep.on .adot { background: #005CA9; box-shadow: 0 0 0 3px rgba(0,92,169,.2); }
+.astep.dn .adot { background: #1B7F4F; }
+.al { font-size: 14px; font-weight: 600; color: #1A1D23; }
+.as { font-size: 12px; color: #B8BEC9; margin-top: 2px; }
 
 /* MODEL CARD */
-.mc{background:var(–white);border:1px solid var(–g100);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.12);margin-bottom:20px;overflow:hidden;}
-.mc-hero{padding:24px 20px 20px;background:linear-gradient(135deg,var(–blue-d) 0%,#1A6DC4 100%);position:relative;}
-.mc-uid{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:3px 11px;font-family:var(–mono);font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:8px;}
-.mc-uid-dot{width:5px;height:5px;border-radius:50%;background:var(–orange);flex-shrink:0;}
-.mc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px;}
-.mc-nm{font-size:20px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px;letter-spacing:-0.3px;}
-.mc-fam{font-size:12px;color:rgba(255,255,255,0.5);}
-.mc-ring{flex-shrink:0;text-align:center;}
-.mc-ring-c{width:58px;height:58px;border-radius:50%;border:2px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 4px;}
-.mc-ring-n{font-size:17px;font-weight:700;color:#fff;line-height:1;}
-.mc-ring-l{font-size:8px;color:rgba(255,255,255,0.4);letter-spacing:0.5px;}
-.mc-ring-name{font-size:10px;font-weight:600;color:rgba(255,255,255,0.65);}
-.cN1 .mc-ring-c{border-color:#FF9393;background:rgba(255,80,80,0.15);}
-.cN2 .mc-ring-c{border-color:#FFBF82;background:rgba(244,121,32,0.15);}
-.cN3 .mc-ring-c{border-color:#FFE08C;background:rgba(255,190,0,0.12);}
-.cN4 .mc-ring-c{border-color:#7EE8B4;background:rgba(27,127,79,0.15);}
-.mc-meta{display:flex;flex-wrap:wrap;gap:14px;}
-.mc-ml{font-size:9px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:1px;}
-.mc-mv{font-size:12px;color:rgba(255,255,255,0.75);}
-.mc-body{padding:20px;}
-.mc-sec{margin-bottom:20px;}
-.mc-sec:last-child{margin-bottom:0;}
-.mc-sec-t{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.9px;color:var(–g300);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(–g100);}
-.mc-txt{font-size:13px;color:var(–g500);line-height:1.75;}
-.ic2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.ic{background:var(–off);border:1px solid var(–g100);border-radius:8px;padding:10px 12px;}
-.ic-l{font-size:9px;font-weight:500;color:var(–g300);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px;}
-.ic-v{font-size:12px;color:var(–g900);line-height:1.4;}
-.sc-rows{display:flex;flex-direction:column;gap:9px;}
-.sc-row{display:flex;align-items:center;gap:10px;}
-.sc-d{font-size:11px;color:var(–g500);font-family:var(–mono);width:140px;flex-shrink:0;}
-.sc-trk{flex:1;height:5px;background:var(–g100);border-radius:3px;overflow:hidden;}
-.sc-fill{height:100%;border-radius:3px;background:var(–blue);transition:width 1.2s cubic-bezier(0.4,0,0.2,1);}
-.sc-v{font-family:var(–mono);font-size:11px;color:var(–g300);width:26px;text-align:right;flex-shrink:0;}
-.sc-total{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:10px 13px;background:var(–blue-l);border:1px solid rgba(0,92,169,0.15);border-radius:6px;}
-.sc-total-l{font-size:12px;font-weight:600;color:var(–blue);}
-.sc-total-v{font-size:20px;font-weight:700;color:var(–blue);}
-.conf-row{display:flex;align-items:center;gap:10px;margin-top:8px;padding:9px 12px;background:var(–off);border:1px solid var(–g100);border-radius:6px;}
-.conf-l{font-size:11px;color:var(–g300);flex-shrink:0;}
-.conf-v{font-family:var(–mono);font-size:13px;font-weight:500;color:var(–green);flex-shrink:0;}
-.conf-b{flex:1;height:4px;background:var(–g200);border-radius:2px;overflow:hidden;}
-.conf-f{height:100%;background:var(–green);border-radius:2px;}
-.conf-note{font-size:11px;color:var(–g300);margin-top:4px;line-height:1.5;}
-.tags{display:flex;flex-wrap:wrap;gap:5px;}
-.tag{background:var(–g100);border-radius:20px;padding:3px 10px;font-size:11px;color:var(–g500);font-family:var(–mono);}
-.ctrl-list{display:flex;flex-direction:column;gap:6px;}
-.ci{padding:9px 12px;border-radius:6px;border-left:3px solid;font-size:13px;color:var(–g700);line-height:1.55;}
-.ci.crit{background:var(–red-l);border-color:var(–red);}
-.ci.warn{background:var(–amb-l);border-color:var(–amber);}
-.ci.ok{background:var(–grn-l);border-color:var(–green);}
-.mtabs{display:flex;border-bottom:1px solid var(–g100);margin-bottom:14px;}
-.mtab{padding:9px 14px;font-size:12px;font-weight:500;color:var(–g300);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;-webkit-user-select:none;}
-.mtab.on{color:var(–blue);border-bottom-color:var(–blue);}
-.mcont{display:none;} .mcont.on{display:block;}
-.mprev{background:var(–off);border:1px solid var(–g100);border-radius:10px;overflow:hidden;}
-.mp-bar{background:var(–white);border-bottom:1px solid var(–g100);padding:8px 12px;display:flex;gap:6px;align-items:center;}
-.mpd{width:8px;height:8px;border-radius:50%;}
-.mp-to{font-size:11px;color:var(–g300);padding:8px 13px 0;}
-.mp-subj{font-size:13px;font-weight:600;color:var(–g900);padding:3px 13px 8px;border-bottom:1px solid var(–g100);}
-.mp-body{padding:12px 13px;font-size:11px;color:var(–g700);line-height:1.75;white-space:pre-wrap;font-family:var(–mono);}
-.mrec{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.mrec-l{font-size:12px;color:var(–g300);flex-shrink:0;}
-.mrec input{flex:1;}
-.mc-foot{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:var(–off);border-top:1px solid var(–g100);flex-wrap:wrap;gap:8px;}
-.mc-foot-l{font-family:var(–mono);font-size:10px;color:var(–g300);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.mc-foot-r{display:flex;gap:6px;flex-shrink:0;}
-.btn-exp{background:var(–white);border:1px solid var(–g200);border-radius:6px;padding:5px 11px;font-family:var(–mono);font-size:11px;color:var(–g500);cursor:pointer;-webkit-appearance:none;}
-.modsec{margin-top:22px;padding-top:20px;border-top:1px solid var(–g100);}
-.mod-title{font-size:18px;font-weight:600;color:var(–g900);margin-bottom:4px;}
-.mod-sub{font-size:13px;color:var(–g500);margin-bottom:16px;line-height:1.55;}
-.dec-btns{display:flex;gap:8px;}
-.dec-btn{flex:1;padding:11px;border-radius:6px;border:1.5px solid var(–g200);background:var(–white);font-family:var(–font);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;color:var(–g500);-webkit-appearance:none;touch-action:manipulation;}
-.dec-btn.approve.sel{border-color:var(–green);background:var(–grn-l);color:var(–green);}
-.dec-btn.reject.sel{border-color:var(–amber);background:var(–amb-l);color:var(–amber);}
-.sbanner{display:none;align-items:center;gap:12px;padding:12px 14px;background:var(–grn-l);border:1px solid rgba(27,127,79,0.25);border-radius:6px;margin-bottom:14px;}
-.sbanner.on{display:flex;}
-.sb-txt{font-size:13px;color:var(–green);line-height:1.5;}
+.mc { background: #fff; border: 1px solid #DDE1E9; border-radius: 14px; box-shadow: 0 6px 24px rgba(0,0,0,.12); overflow: hidden; margin-bottom: 18px; }
+.mc-hd { padding: 22px 18px 18px; background: linear-gradient(135deg,#003F7A,#1A6DC4); }
+.mc-uid { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: rgba(255,255,255,.75); margin-bottom: 8px; font-family: monospace; }
+.mc-udot { width: 5px; height: 5px; border-radius: 50%; background: #F47920; }
+.mc-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.mc-nm { font-size: 20px; font-weight: 700; color: #fff; line-height: 1.2; }
+.mc-fm { font-size: 12px; color: rgba(255,255,255,.55); margin-top: 3px; }
+.mc-ring { text-align: center; flex-shrink: 0; }
+.mc-rc { width: 56px; height: 56px; border-radius: 50%; border: 2px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 4px; }
+.mc-rn { font-size: 16px; font-weight: 800; color: #fff; line-height: 1; }
+.mc-rl { font-size: 8px; color: rgba(255,255,255,.45); letter-spacing: .5px; }
+.mc-rnm { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.7); }
+.N1 .mc-rc { border-color: #FF9393; background: rgba(255,80,80,.18); }
+.N2 .mc-rc { border-color: #FFBF82; background: rgba(244,121,32,.18); }
+.N3 .mc-rc { border-color: #FFE08C; background: rgba(255,190,0,.14); }
+.N4 .mc-rc { border-color: #7EE8B4; background: rgba(27,127,79,.18); }
+.mc-meta { display: flex; flex-wrap: wrap; gap: 14px; }
+.mc-ml { font-size: 9px; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 1px; }
+.mc-mv { font-size: 12px; color: rgba(255,255,255,.8); }
+.mc-bd { padding: 18px; }
+.sec { margin-bottom: 18px; }
+.sec-t { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: #B8BEC9; margin-bottom: 10px; padding-bottom: 7px; border-bottom: 1px solid #ECEEF2; }
+.txt { font-size: 13px; color: #717A8C; line-height: 1.7; }
+.ig { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ic { background: #F5F6F8; border: 1px solid #ECEEF2; border-radius: 8px; padding: 10px 12px; }
+.ic-l { font-size: 9px; font-weight: 600; color: #B8BEC9; text-transform: uppercase; margin-bottom: 3px; }
+.ic-v { font-size: 12px; color: #1A1D23; line-height: 1.4; }
+.sc-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.sc-d { font-size: 11px; color: #717A8C; width: 130px; flex-shrink: 0; }
+.sc-trk { flex: 1; height: 5px; background: #ECEEF2; border-radius: 3px; overflow: hidden; }
+.sc-f { height: 100%; border-radius: 3px; background: #005CA9; }
+.sc-v { font-size: 11px; color: #B8BEC9; width: 26px; text-align: right; flex-shrink: 0; }
+.sc-tot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding: 10px 13px; background: #EBF3FB; border: 1px solid rgba(0,92,169,.15); border-radius: 6px; }
+.sc-tot-l { font-size: 12px; font-weight: 700; color: #005CA9; }
+.sc-tot-v { font-size: 20px; font-weight: 800; color: #005CA9; }
+.tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag { background: #ECEEF2; border-radius: 20px; padding: 3px 10px; font-size: 11px; color: #717A8C; }
+.ci { padding: 9px 12px; border-radius: 6px; border-left: 3px solid; font-size: 13px; color: #3C4353; line-height: 1.5; margin-bottom: 6px; }
+.ci.crit { background: #FBECEC; border-color: #B83232; }
+.ci.warn { background: #FDF5E6; border-color: #9A6200; }
+.ci.ok   { background: #E6F4EE; border-color: #1B7F4F; }
+.mtabs { display: flex; border-bottom: 1px solid #ECEEF2; margin-bottom: 12px; }
+.mtab { padding: 9px 14px; font-size: 12px; font-weight: 600; color: #B8BEC9; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; -webkit-user-select: none; }
+.mtab.on { color: #005CA9; border-bottom-color: #005CA9; }
+.mcont { display: none; }
+.mcont.on { display: block; }
+.mprev { background: #F5F6F8; border: 1px solid #DDE1E9; border-radius: 10px; overflow: hidden; }
+.mp-bar { background: #fff; border-bottom: 1px solid #ECEEF2; padding: 8px 12px; display: flex; gap: 6px; }
+.mpd { width: 8px; height: 8px; border-radius: 50%; }
+.mp-to { font-size: 11px; color: #B8BEC9; padding: 8px 12px 0; }
+.mp-sub { font-size: 13px; font-weight: 600; padding: 3px 12px 8px; border-bottom: 1px solid #ECEEF2; }
+.mp-body { padding: 12px; font-size: 11px; color: #3C4353; line-height: 1.75; white-space: pre-wrap; font-family: monospace; }
+.mrec { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.mrec-l { font-size: 12px; color: #B8BEC9; flex-shrink: 0; }
+.mrec input { flex: 1; }
+.dec-btns { display: flex; gap: 8px; }
+.dec-btn { flex: 1; padding: 12px; border-radius: 8px; border: 2px solid #D8DCE5; background: #fff; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; -webkit-appearance: none; touch-action: manipulation; color: #717A8C; }
+.dec-btn.ap.sel { border-color: #1B7F4F; background: #E6F4EE; color: #1B7F4F; }
+.dec-btn.rj.sel { border-color: #9A6200; background: #FDF5E6; color: #9A6200; }
+.ok-banner { display: none; align-items: center; gap: 12px; padding: 12px 14px; background: #E6F4EE; border: 1px solid rgba(27,127,79,.25); border-radius: 8px; margin-bottom: 14px; font-size: 13px; color: #1B7F4F; }
+.ok-banner.on { display: flex; }
+.mc-foot { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; background: #F5F6F8; border-top: 1px solid #ECEEF2; }
+.mc-foot-l { font-size: 10px; color: #B8BEC9; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: monospace; }
+.mc-foot-r { display: flex; gap: 6px; flex-shrink: 0; }
+.bexp { background: #fff; border: 1px solid #DDE1E9; border-radius: 6px; padding: 5px 10px; font-size: 11px; color: #717A8C; cursor: pointer; font-family: monospace; -webkit-appearance: none; }
 
 /* VALIDATION */
-.vf{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
-.fbtn{padding:6px 12px;border-radius:20px;border:1px solid var(–g200);font-size:12px;font-weight:500;color:var(–g500);background:var(–white);cursor:pointer;-webkit-appearance:none;touch-action:manipulation;}
-.fbtn.on{background:var(–blue);border-color:var(–blue);color:#fff;}
-.vtable{width:100%;border-collapse:collapse;}
-.vtable th{text-align:left;padding:9px 13px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.6px;color:var(–g300);border-bottom:1px solid var(–g100);background:var(–off);}
-.vtable td{padding:11px 13px;font-size:13px;color:var(–g700);border-bottom:1px solid var(–g100);}
-.vtable tbody tr:last-child td{border-bottom:none;}
-.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;}
-.bN1{background:var(–red-l);color:var(–red);border:1px solid rgba(184,50,50,0.2);}
-.bN2{background:#FEF2E8;color:var(–orange);border:1px solid rgba(244,121,32,0.2);}
-.bN3{background:var(–amb-l);color:var(–amber);border:1px solid rgba(154,98,0,0.2);}
-.bN4{background:var(–grn-l);color:var(–green);border:1px solid rgba(27,127,79,0.2);}
-.bN5{background:var(–g100);color:var(–g500);border:1px solid var(–g200);}
+.vfilters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.fbtn { padding: 7px 13px; border-radius: 20px; border: 1.5px solid #D8DCE5; font-size: 12px; font-weight: 600; color: #717A8C; background: #fff; cursor: pointer; -webkit-appearance: none; touch-action: manipulation; }
+.fbtn.on { background: #005CA9; border-color: #005CA9; color: #fff; }
+.vt { width: 100%; border-collapse: collapse; }
+.vt th { text-align: left; padding: 9px 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: #B8BEC9; border-bottom: 1px solid #ECEEF2; background: #F5F6F8; }
+.vt td { padding: 11px 12px; font-size: 13px; color: #3C4353; border-bottom: 1px solid #ECEEF2; }
+.vt tbody tr:last-child td { border: none; }
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.bN1 { background: #FBECEC; color: #B83232; border: 1px solid rgba(184,50,50,.2); }
+.bN2 { background: #FEF2E8; color: #F47920; border: 1px solid rgba(244,121,32,.2); }
+.bN3 { background: #FDF5E6; color: #9A6200; border: 1px solid rgba(154,98,0,.2); }
+.bN4 { background: #E6F4EE; color: #1B7F4F; border: 1px solid rgba(27,127,79,.2); }
+.bN5 { background: #ECEEF2; color: #717A8C; border: 1px solid #D8DCE5; }
 
 /* MODAL */
-.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:500;display:none;align-items:flex-end;justify-content:center;padding:0;}
-.modal-ov.on{display:flex;}
-.modal{background:var(–white);border-radius:16px 16px 0 0;box-shadow:0 -4px 40px rgba(0,0,0,0.2);width:100%;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 18px;}
-.modal-close{float:right;background:none;border:none;font-size:22px;color:var(–g300);cursor:pointer;-webkit-appearance:none;margin-top:-4px;}
-.uc{background:var(–off);border:1px solid var(–g100);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
-.uc-hd{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
-.uc-av{width:26px;height:26px;border-radius:50%;background:var(–blue);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0;}
-.uc-nm{font-size:13px;font-weight:500;}
-.uc-t{font-size:11px;color:var(–g300);margin-left:auto;font-family:var(–mono);}
-.uc-txt{font-size:13px;color:var(–g700);line-height:1.6;}
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; align-items: flex-end; }
+.modal-bg.on { display: flex; }
+.modal { background: #fff; border-radius: 16px 16px 0 0; width: 100%; max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 22px 16px; }
+.modal-x { float: right; background: none; border: none; font-size: 24px; color: #B8BEC9; cursor: pointer; margin: -6px -4px 0 0; line-height: 1; }
+.uc { background: #F5F6F8; border: 1px solid #ECEEF2; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.uc-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.uc-av { width: 26px; height: 26px; border-radius: 50%; background: #005CA9; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.uc-nm { font-size: 13px; font-weight: 600; }
+.uc-t { font-size: 11px; color: #B8BEC9; margin-left: auto; }
+.uc-txt { font-size: 13px; color: #3C4353; line-height: 1.6; }
 
 /* BI */
-.kpig{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-@media(min-width:600px){.kpig{grid-template-columns:repeat(4,1fr);}}
-.kpi{background:var(–white);border:1px solid var(–g100);border-radius:12px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);position:relative;overflow:hidden;}
-.kpi::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;}
-.kpi.kb::before{background:var(–blue);}
-.kpi.ko::before{background:var(–orange);}
-.kpi.kg::before{background:var(–green);}
-.kpi.kr::before{background:var(–red);}
-.kpi-l{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.7px;color:var(–g300);margin-bottom:7px;}
-.kpi-v{font-size:32px;font-weight:700;color:var(–g900);letter-spacing:-1px;line-height:1;margin-bottom:4px;}
-.kpi-s{font-size:11px;color:var(–g500);}
-.chart-card{background:var(–white);border:1px solid var(–g100);border-radius:12px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:14px;}
-.chart-t{font-size:13px;font-weight:600;color:var(–g900);margin-bottom:14px;}
-.bar-chart{display:flex;flex-direction:column;gap:9px;}
-.bar-row{display:flex;align-items:center;gap:10px;}
-.bar-lbl{font-size:11px;color:var(–g500);width:110px;flex-shrink:0;text-align:right;}
-.bar-trk{flex:1;height:20px;background:var(–off);border-radius:4px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:600;color:#fff;}
-.bar-val{font-family:var(–mono);font-size:11px;color:var(–g500);width:22px;flex-shrink:0;}
+.kpig { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.kpi { background: #fff; border: 1px solid #DDE1E9; border-radius: 12px; padding: 16px; position: relative; overflow: hidden; }
+.kpi::before { content: ‘’; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.kb::before { background: #005CA9; } .ko::before { background: #F47920; }
+.kg::before { background: #1B7F4F; } .kr::before { background: #B83232; }
+.kpi-l { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: #B8BEC9; margin-bottom: 7px; }
+.kpi-v { font-size: 30px; font-weight: 800; color: #1A1D23; letter-spacing: -1px; line-height: 1; margin-bottom: 3px; }
+.kpi-s { font-size: 11px; color: #717A8C; }
+.chart { background: #fff; border: 1px solid #DDE1E9; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+.chart-t { font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+.br { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+.br-l { font-size: 11px; color: #717A8C; width: 110px; text-align: right; flex-shrink: 0; }
+.br-trk { flex: 1; height: 20px; background: #F5F6F8; border-radius: 4px; overflow: hidden; }
+.br-f { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+.br-v { font-size: 11px; color: #717A8C; width: 20px; flex-shrink: 0; }
 
 /* PAGE HEADER */
-.ph{margin-bottom:20px;}
-.ph-eye{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(–blue);margin-bottom:4px;}
-.ph-title{font-size:24px;font-weight:700;color:var(–g900);letter-spacing:-0.5px;line-height:1.15;margin-bottom:5px;}
-.ph-desc{font-size:13px;color:var(–g500);line-height:1.6;}
+.ph { margin-bottom: 18px; }
+.ph-e { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #005CA9; margin-bottom: 4px; }
+.ph-t { font-size: 22px; font-weight: 800; color: #1A1D23; letter-spacing: -.5px; margin-bottom: 5px; }
+.ph-d { font-size: 13px; color: #717A8C; line-height: 1.6; }
 
 /* SAIBA MAIS */
-.sm-hero{background:linear-gradient(135deg,var(–blue-d),#1A6DC4);border-radius:14px;padding:24px 20px;margin-bottom:16px;color:#fff;}
-.sm-step{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(–g100);}
-.sm-step:last-child{border-bottom:none;}
-.sm-num{width:32px;height:32px;border-radius:50%;background:var(–blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;margin-top:2px;}
-.sm-st{font-size:14px;font-weight:600;color:var(–g900);margin-bottom:5px;}
-.sm-sd{font-size:13px;color:var(–g500);line-height:1.7;}
-.sm-note{margin-top:8px;padding:9px 12px;background:var(–off);border:1px solid var(–g100);border-radius:6px;font-size:12px;color:var(–g500);line-height:1.55;}
-.a-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-.a-pill{background:var(–blue-l);border:1px solid rgba(0,92,169,0.15);border-radius:20px;padding:4px 11px;font-size:11px;color:var(–blue);font-weight:500;}
-.faq-i{background:var(–white);border:1px solid var(–g100);border-radius:10px;overflow:hidden;margin-bottom:8px;}
-.faq-q{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;font-size:13px;font-weight:500;color:var(–g900);-webkit-user-select:none;touch-action:manipulation;}
-.faq-ico{color:var(–g300);font-size:18px;transition:transform 0.2s;flex-shrink:0;}
-.faq-i.open .faq-ico{transform:rotate(45deg);}
-.faq-a{display:none;padding:0 16px 12px;font-size:13px;color:var(–g500);line-height:1.7;border-top:1px solid var(–g100);}
-.faq-i.open .faq-a{display:block;padding-top:11px;}
+.sm-hero { background: linear-gradient(135deg,#003F7A,#1A6DC4); border-radius: 14px; padding: 22px 18px; margin-bottom: 14px; color: #fff; }
+.sm-step { display: flex; gap: 14px; padding: 18px 0; border-bottom: 1px solid #ECEEF2; }
+.sm-step:last-child { border: none; }
+.sm-num { width: 30px; height: 30px; border-radius: 50%; background: #005CA9; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; margin-top: 2px; }
+.sm-t { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.sm-d { font-size: 13px; color: #717A8C; line-height: 1.7; }
+.sm-n { margin-top: 8px; padding: 9px 12px; background: #F5F6F8; border: 1px solid #ECEEF2; border-radius: 6px; font-size: 12px; color: #717A8C; line-height: 1.55; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pill { background: #EBF3FB; border: 1px solid rgba(0,92,169,.15); border-radius: 20px; padding: 4px 10px; font-size: 11px; color: #005CA9; font-weight: 600; }
+.faq-i { background: #fff; border: 1px solid #DDE1E9; border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+.faq-q { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; font-size: 14px; font-weight: 600; color: #1A1D23; -webkit-user-select: none; touch-action: manipulation; }
+.faq-ico { color: #B8BEC9; font-size: 20px; transition: transform .2s; flex-shrink: 0; }
+.faq-i.open .faq-ico { transform: rotate(45deg); }
+.faq-a { display: none; padding: 0 16px 13px; font-size: 13px; color: #717A8C; line-height: 1.7; border-top: 1px solid #ECEEF2; }
+.faq-i.open .faq-a { display: block; padding-top: 11px; }
 
 /* STORAGE */
-.stor-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-@media(max-width:500px){.stor-grid{grid-template-columns:1fr;}}
-.stor-item{background:var(–white);border:1px solid var(–g100);border-radius:12px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,0.07);}
-.stor-t{font-size:13px;font-weight:600;color:var(–g900);margin-bottom:3px;}
-.stor-path{font-family:var(–mono);font-size:10px;color:var(–blue);background:var(–blue-l);border-radius:4px;padding:2px 7px;display:inline-block;margin-bottom:5px;}
-.stor-d{font-size:12px;color:var(–g500);line-height:1.6;}
+.sg { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media(max-width:480px) { .sg { grid-template-columns: 1fr; } }
+.si { background: #fff; border: 1px solid #DDE1E9; border-radius: 12px; padding: 14px 16px; }
+.si-t { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.si-p { font-family: monospace; font-size: 10px; color: #005CA9; background: #EBF3FB; border-radius: 4px; padding: 2px 7px; display: inline-block; margin-bottom: 5px; }
+.si-d { font-size: 12px; color: #717A8C; line-height: 1.6; }
 
-/* DESKTOP SIDEBAR LAYOUT */
+/* DESKTOP */
 @media(min-width:769px){
-body{display:flex;}
-#topbar{display:none!important;}
-#sidebar{display:flex;flex-direction:column;width:240px;min-width:240px;background:var(–blue-d);min-height:100vh;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;}
-#main{flex:1;min-width:0;display:flex;flex-direction:column;}
-#desktop-topbar{display:flex;align-items:center;padding:0 28px;height:54px;background:var(–white);border-bottom:1px solid var(–g100);box-shadow:0 1px 0 var(–g100);flex-shrink:0;position:sticky;top:0;z-index:50;}
-#content{padding:28px 32px 60px;}
-.ic2{grid-template-columns:repeat(4,1fr);}
-.kpig{grid-template-columns:repeat(4,1fr);}
-}
-@media(max-width:768px){
-#sidebar{display:none!important;}
-#main{width:100%;}
-#desktop-topbar{display:none!important;}
+body { display: flex; }
+.hdr, .menu { display: none !important; }
+#sidebar { display: flex !important; flex-direction: column; width: 240px; min-width: 240px; background: #003F7A; min-height: 100vh; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; }
+#main-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+#dktop { display: flex !important; align-items: center; padding: 0 28px; height: 54px; background: #fff; border-bottom: 1px solid #DDE1E9; position: sticky; top: 0; z-index: 50; }
+.pg { padding: 28px 32px 60px; }
+.ig { grid-template-columns: repeat(4,1fr); }
+.kpig { grid-template-columns: repeat(4,1fr); }
 }
 
-#sidebar{display:none;}
-#main{width:100%;}
-#desktop-topbar{display:none;}
-.sb-brand{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.12);}
-.sb-brand-mark{display:flex;align-items:center;gap:10px;margin-bottom:3px;}
-.sb-brand-icon{width:32px;height:32px;background:var(–orange);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.sb-brand-name{font-size:18px;font-weight:600;color:#fff;}
-.sb-brand-sub{font-size:9px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:rgba(255,255,255,0.3);padding-left:42px;}
-.sb-sec{font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:18px 16px 6px;}
-.sb-nav-btn{display:block;width:100%;text-align:left;padding:10px 16px;background:none;border:none;border-left:3px solid transparent;color:rgba(255,255,255,0.6);font-family:var(–font);font-size:13px;cursor:pointer;-webkit-appearance:none;}
-.sb-nav-btn.on{background:rgba(255,255,255,0.1);border-left-color:var(–orange);color:#fff;font-weight:500;}
-.sb-nav-btn:hover{background:rgba(255,255,255,0.06);}
-.sb-footer{margin-top:auto;padding:14px 16px;border-top:1px solid rgba(255,255,255,0.07);font-size:10px;color:rgba(255,255,255,0.2);font-family:var(–mono);}
-.tb-group{flex:1;min-width:0;}
-.tb-title{font-size:15px;font-weight:600;color:var(–g900);letter-spacing:-0.2px;}
-.tb-sub{font-size:11px;color:var(–g500);}
-.tb-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.tb-pill{display:flex;align-items:center;gap:6px;background:var(–blue-l);border:1px solid rgba(0,92,169,0.15);border-radius:20px;padding:5px 12px;font-size:11px;color:var(–blue);font-weight:500;}
-.tb-dot{width:6px;height:6px;border-radius:50%;background:var(–green);}
-.tb-av{width:30px;height:30px;border-radius:50%;background:var(–blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;}
+#sidebar { display: none; }
+#dktop { display: none; }
+.sb-brand { padding: 18px 16px 14px; border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.12); }
+.sb-bm { display: flex; align-items: center; gap: 10px; margin-bottom: 3px; }
+.sb-bi { width: 32px; height: 32px; background: #F47920; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sb-bn { font-size: 18px; font-weight: 700; color: #fff; }
+.sb-bs { font-size: 9px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: rgba(255,255,255,.3); padding-left: 42px; }
+.sb-s { font-size: 9px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(255,255,255,.25); padding: 18px 16px 6px; }
+.sb-nb { display: block; width: 100%; text-align: left; padding: 10px 16px; background: none; border: none; border-left: 3px solid transparent; color: rgba(255,255,255,.6); font-size: 13px; font-family: inherit; cursor: pointer; -webkit-appearance: none; }
+.sb-nb.on { background: rgba(255,255,255,.1); border-left-color: #F47920; color: #fff; font-weight: 600; }
+.sb-ft { margin-top: auto; padding: 14px 16px; border-top: 1px solid rgba(255,255,255,.07); font-size: 10px; color: rgba(255,255,255,.2); font-family: monospace; }
+.tb-g { flex: 1; min-width: 0; }
+.tb-t { font-size: 15px; font-weight: 700; color: #1A1D23; }
+.tb-s { font-size: 11px; color: #717A8C; }
+.tb-r { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.tb-p { display: flex; align-items: center; gap: 6px; background: #EBF3FB; border: 1px solid rgba(0,92,169,.15); border-radius: 20px; padding: 5px 12px; font-size: 11px; color: #005CA9; font-weight: 600; }
+.tb-dot { width: 6px; height: 6px; border-radius: 50%; background: #1B7F4F; }
+.tb-av { width: 30px; height: 30px; border-radius: 50%; background: #005CA9; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; }
 </style>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 
 </head>
 <body>
 
 <div id="sidebar">
   <div class="sb-brand">
-    <div class="sb-brand-mark">
-      <div class="sb-brand-icon">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <rect x="1" y="1" width="14" height="14" rx="2" stroke="white" stroke-width="1.5" fill="none"/>
-          <path d="M4 8h8M8 4v8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="sb-brand-name">ModelScan</div>
+    <div class="sb-bm">
+      <div class="sb-bi"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="2" stroke="white" stroke-width="1.5" fill="none"/><path d="M4 8h8M8 4v8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="sb-bn">ModelScan</div>
     </div>
-    <div class="sb-brand-sub">Gestão de Risco de Modelo</div>
+    <div class="sb-bs">Gestao de Risco de Modelo</div>
   </div>
-  <div class="sb-sec">Principal</div>
-  <button class="sb-nav-btn on" onclick="showPg('catalog',this)">📋 Nova Catalogação</button>
-  <button class="sb-nav-btn" onclick="showPg('validation',this)">🔍 Área de Validação <span id="val-badge-d" style="background:var(--orange);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;margin-left:6px;font-weight:600;">3</span></button>
-  <button class="sb-nav-btn" onclick="showPg('bi',this)">📊 Painel BI</button>
-  <div class="sb-sec">Apoio</div>
-  <button class="sb-nav-btn" onclick="showPg('saibamais',this)">💡 Saiba Mais</button>
-  <button class="sb-nav-btn" onclick="showPg('storage',this)">🗂 Onde ficam os arquivos</button>
-  <div class="sb-footer">v1.0 · 2025</div>
+  <div class="sb-s">Principal</div>
+  <button class="sb-nb on" onclick="nav('catalog',this)">Catalogacao</button>
+  <button class="sb-nb" onclick="nav('validation',this)">Validacao</button>
+  <button class="sb-nb" onclick="nav('bi',this)">Painel BI</button>
+  <div class="sb-s">Apoio</div>
+  <button class="sb-nb" onclick="nav('saibamais',this)">Saiba Mais</button>
+  <button class="sb-nb" onclick="nav('storage',this)">Arquivos</button>
+  <div class="sb-ft">v2.0</div>
 </div>
 
-<div id="main">
+<div id="main-wrap">
 
-  <div id="topbar" style="display:flex;background-color:#003F7A;background:var(--blue-d,#003F7A);">
-    <div id="topbar-brand">
-      <div id="topbar-icon">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-          <rect x="1" y="1" width="14" height="14" rx="2" stroke="white" stroke-width="1.5" fill="none"/>
-          <path d="M4 8h8M8 4v8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span id="topbar-name">ModelScan</span>
+  <div class="hdr">
+    <div class="hdr-brand">
+      <div class="hdr-icon"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="2" stroke="white" stroke-width="1.5" fill="none"/><path d="M4 8h8M8 4v8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="hdr-name">ModelScan</div>
     </div>
-    <button id="menu-btn" onclick="toggleMenu()" type="button">&#9776;</button>
+    <button class="hdr-btn" id="mbtn" onclick="openMenu()">&#9776;</button>
   </div>
 
-  <div id="nav-drawer">
-    <button class="nav-btn on" onclick="navTo('catalog',this)" type="button">📋 Nova Catalogação</button>
-    <button class="nav-btn" onclick="navTo('validation',this)" type="button">🔍 Área de Validação</button>
-    <button class="nav-btn" onclick="navTo('bi',this)" type="button">📊 Painel BI</button>
-    <button class="nav-btn" onclick="navTo('saibamais',this)" type="button">💡 Saiba Mais</button>
-    <button class="nav-btn" onclick="navTo('storage',this)" type="button">🗂 Onde ficam os arquivos</button>
+  <div class="menu" id="mdrawer">
+    <button class="mitem on" onclick="mnav('catalog',this)">Catalogacao</button>
+    <button class="mitem" onclick="mnav('validation',this)">Validacao</button>
+    <button class="mitem" onclick="mnav('bi',this)">Painel BI</button>
+    <button class="mitem" onclick="mnav('saibamais',this)">Saiba Mais</button>
+    <button class="mitem" onclick="mnav('storage',this)">Arquivos</button>
   </div>
 
-  <div id="desktop-topbar">
-    <div class="tb-group">
-      <div class="tb-title" id="tb-title">Nova Catalogação</div>
-      <div class="tb-sub" id="tb-sub">Informe as fontes e deixe os agentes fazerem o trabalho</div>
+  <div id="dktop">
+    <div class="tb-g">
+      <div class="tb-t" id="dkt">Catalogacao</div>
+      <div class="tb-s" id="dks">Informe as fontes e deixe os agentes fazerem o trabalho</div>
     </div>
-    <div class="tb-right">
-      <div class="tb-pill"><div class="tb-dot"></div>Sistema ativo</div>
+    <div class="tb-r">
+      <div class="tb-p"><div class="tb-dot"></div>Sistema ativo</div>
       <div class="tb-av">VM</div>
     </div>
   </div>
 
-  <div id="content">
+  <div class="pg on" id="pg-catalog">
+    <div class="steps">
+      <div class="step on" id="st1"><div class="step-n">1</div><div class="step-l">Identificacao</div></div>
+      <div class="step" id="st2"><div class="step-n">2</div><div class="step-l">Fontes</div></div>
+      <div class="step" id="st3"><div class="step-n">3</div><div class="step-l">Analise</div></div>
+      <div class="step" id="st4"><div class="step-n">4</div><div class="step-l">Model Card</div></div>
+    </div>
 
 ```
-<div class="pg on" id="pg-catalog">
+<div class="pnl on" id="pn1">
+  <div class="tip"><span style="flex-shrink:0;font-size:18px;">&#128075;</span><div><strong>Ola! Que bom ter voce aqui.</strong> Nao se preocupe — preencha as informacoes abaixo e indique onde esta a documentacao do seu modelo. O resto fica com a gente!</div></div>
   <div class="card">
-    <div class="cp">
-      <div id="wizard">
-        <div class="ws on" id="ws1"><div class="ws-num">1</div><div class="ws-lbl">Identificação</div></div>
-        <div class="ws" id="ws2"><div class="ws-num">2</div><div class="ws-lbl">Fontes</div></div>
-        <div class="ws" id="ws3"><div class="ws-num">3</div><div class="ws-lbl">Análise</div></div>
-        <div class="ws" id="ws4"><div class="ws-num">4</div><div class="ws-lbl">Model Card</div></div>
+    <div class="card-t">Acesso a API</div>
+    <div class="field">
+      <label>Chave API Anthropic</label>
+      <div class="key-row">
+        <input type="password" id="api-key" placeholder="sk-ant-... (deixe em branco para demo)" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
+        <button class="eye" onclick="toggleKey()" type="button">&#128065;</button>
       </div>
+    </div>
+    <div style="font-size:11px;color:#B8BEC9;margin-top:6px;">Gere em <a href="https://console.anthropic.com" style="color:#005CA9;">console.anthropic.com</a> &gt; API Keys</div>
+  </div>
+  <div class="card">
+    <div class="card-t">Dados do Modelo</div>
+    <div class="g2" style="margin-bottom:12px;">
+      <div class="field" style="margin:0;"><label>Nome do Modelo <span class="req">*</span></label><input type="text" id="nm" placeholder="ex: Scoring de Credito PF"></div>
+      <div class="field" style="margin:0;"><label>Area / Superintendencia <span class="req">*</span></label><input type="text" id="ar" placeholder="ex: SUPEC"></div>
+    </div>
+    <div class="g2">
+      <div class="field" style="margin:0;"><label>Model Owner <span class="req">*</span></label><input type="text" id="ow" placeholder="Seu nome"></div>
+      <div class="field" style="margin:0;"><label>Seu e-mail <span class="req">*</span></label><input type="text" id="oe" placeholder="seu@email.com" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t">Contato — Validacao</div>
+    <div class="g2">
+      <div class="field" style="margin:0;"><label>E-mail Validacao</label><input type="text" id="ve" placeholder="validacao@email.com" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
+      <div class="field" style="margin:0;"><label>E-mail Comite (opcional)</label><input type="text" id="ce" placeholder="comite@email.com" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
+    </div>
+  </div>
+  <button class="btn btn-p" type="button" onclick="step2()" style="margin-top:18px;">Proximo — Fontes &gt;</button>
+</div>
 
-      <div class="wp on" id="wp1">
-        <div class="notice n-tip">
-          <span class="n-ico">👋</span>
-          <div><strong>Olá! Que bom ter você aqui.</strong> Não se preocupe — vamos facilitar ao máximo. Preencha as informações abaixo e indique onde está a documentação do seu modelo. O resto fica com a gente! 🚀</div>
-        </div>
-        <div class="g2">
-          <div class="card cp">
-            <div class="ct">Acesso à API</div>
-            <div class="field">
-              <label>Chave API Anthropic</label>
-              <div class="key-row">
-                <input type="password" id="api-key" placeholder="sk-ant-... (ou deixe em branco para demo)" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
-                <button class="eye-btn" onclick="toggleKey()" type="button">👁</button>
-              </div>
-            </div>
-            <div style="font-size:11px;color:var(--g300);margin-top:6px;line-height:1.5;">Gere em <strong style="color:var(--blue);">console.anthropic.com</strong> → API Keys</div>
-          </div>
-          <div class="card cp" style="background:var(--blue-l);border-color:rgba(0,92,169,.15);">
-            <div class="ct" style="color:var(--blue);border-color:rgba(0,92,169,.15);">Como funciona?</div>
-            <div style="font-size:13px;color:var(--blue-d);line-height:1.7;">Você informa as fontes → <strong>5 agentes de IA</strong> leem tudo → geramos o <strong>Model Card</strong> → você revisa em minutos. 🎯</div>
-          </div>
-        </div>
-        <div class="card cp">
-          <div class="ct">Dados do Modelo — campos com * são obrigatórios</div>
-          <div class="g2" style="margin-bottom:12px;">
-            <div class="field" style="margin:0;"><label>Nome do Modelo <span class="req">*</span></label><input type="text" id="model-name" placeholder="ex: Scoring de Crédito PF"></div>
-            <div class="field" style="margin:0;"><label>Área / Superintendência <span class="req">*</span></label><input type="text" id="model-area" placeholder="ex: SUPEC — Crédito PF"></div>
-          </div>
-          <div class="g2">
-            <div class="field" style="margin:0;"><label>Model Owner (seu nome) <span class="req">*</span></label><input type="text" id="model-owner" placeholder="Nome completo"></div>
-            <div class="field" style="margin:0;"><label>Seu e-mail <span class="req">*</span></label><input type="text" id="owner-email" placeholder="seu@email.com" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
-          </div>
-        </div>
-        <div class="card cp">
-          <div class="ct">Contato — Área de Validação</div>
-          <div class="g2">
-            <div class="field" style="margin:0;"><label>E-mail — Validação de Modelos</label><input type="text" id="val-email" placeholder="validacao@email.com" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
-            <div class="field" style="margin:0;"><label>E-mail — Comitê (opcional)</label><input type="text" id="comite-email" placeholder="comite@email.com" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false"></div>
-          </div>
-        </div>
-        <div class="btn-row">
-          <div></div>
-          <button class="btn btn-p" type="button" id="btn-step2" onclick="goStep(2)">Próximo — Fontes →</button>
-        </div>
-      </div>
+<div class="pnl" id="pn2">
+  <div class="tip"><span style="flex-shrink:0;font-size:18px;">&#128194;</span><div>Selecione o tipo de fonte e envie arquivos ou links. <strong>Quanto mais informacao, melhor o resultado!</strong></div></div>
+  <div class="card">
+    <div class="card-t">Tipo de Fonte</div>
+    <div class="g4">
+      <div class="tile" data-s="pdf" onclick="togTile(this)"><div class="tile-i">&#128196;</div><div class="tile-l">PDF/Word</div></div>
+      <div class="tile" data-s="sharepoint" onclick="togTile(this)"><div class="tile-i">&#9729;&#65039;</div><div class="tile-l">SharePoint</div></div>
+      <div class="tile" data-s="databricks" onclick="togTile(this)"><div class="tile-i">&#9889;</div><div class="tile-l">Databricks</div></div>
+      <div class="tile" data-s="gcp" onclick="togTile(this)"><div class="tile-i">&#128309;</div><div class="tile-l">Google Cloud</div></div>
+      <div class="tile" data-s="python" onclick="togTile(this)"><div class="tile-i">&#128013;</div><div class="tile-l">Python/Jupyter</div></div>
+      <div class="tile" data-s="r" onclick="togTile(this)"><div class="tile-i">&#128202;</div><div class="tile-l">R/RMarkdown</div></div>
+      <div class="tile" data-s="git" onclick="togTile(this)"><div class="tile-i">&#128193;</div><div class="tile-l">Git/GitLab</div></div>
+      <div class="tile" data-s="link" onclick="togTile(this)"><div class="tile-i">&#128279;</div><div class="tile-l">Link/URL</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t">Upload de Arquivos</div>
+    <div class="upz">
+      <input type="file" id="finp" multiple accept=".pdf,.doc,.docx,.txt,.py,.r,.R,.ipynb,.md,.csv" onchange="addFiles(this.files)">
+      <div style="font-size:28px;">&#11014;&#65039;</div>
+      <div class="upz-t">Toque para selecionar arquivos</div>
+      <div class="upz-h">PDF · DOCX · .py · .R · .ipynb · .md</div>
+    </div>
+    <div class="flist" id="flist"></div>
+  </div>
+  <div class="card">
+    <div class="card-t">Links de Repositorios</div>
+    <div class="lrow"><input type="text" id="linp" placeholder="https://..." inputmode="url" autocapitalize="none" autocorrect="off"><button class="ladd" type="button" onclick="addLink()">+ Add</button></div>
+    <div class="chips" id="chips"></div>
+  </div>
+  <div class="card">
+    <div class="card-t">Contexto Adicional (opcional)</div>
+    <textarea id="ctx" placeholder="Cole trechos de codigo, descricoes ou qualquer contexto util..."></textarea>
+  </div>
+  <div class="btn-row" style="margin-top:18px;">
+    <button class="btn btn-s" type="button" onclick="goPnl(1)">&#8592; Voltar</button>
+    <button class="btn btn-p" type="button" onclick="runAnalysis()">Analisar com Agentes &gt;</button>
+  </div>
+</div>
 
-      <div class="wp" id="wp2">
-        <div class="notice n-tip">
-          <span class="n-ico">📂</span>
-          <div>Selecione o tipo de fonte e envie arquivos ou links. <strong>Quanto mais informação, melhor o resultado!</strong></div>
-        </div>
-        <div class="card cp" style="margin-bottom:14px;">
-          <div class="ct">Tipo de Fonte</div>
-          <div class="g4">
-            <div class="src-tile" data-src="pdf" onclick="togSrc(this)"><div class="src-ico">📄</div><div class="src-lbl">PDF / Word</div></div>
-            <div class="src-tile" data-src="sharepoint" onclick="togSrc(this)"><div class="src-ico">☁️</div><div class="src-lbl">SharePoint</div></div>
-            <div class="src-tile" data-src="databricks" onclick="togSrc(this)"><div class="src-ico">⚡</div><div class="src-lbl">Databricks</div></div>
-            <div class="src-tile" data-src="gcp" onclick="togSrc(this)"><div class="src-ico">🔵</div><div class="src-lbl">Google Cloud</div></div>
-            <div class="src-tile" data-src="python" onclick="togSrc(this)"><div class="src-ico">🐍</div><div class="src-lbl">Python/Jupyter</div></div>
-            <div class="src-tile" data-src="r" onclick="togSrc(this)"><div class="src-ico">📊</div><div class="src-lbl">R / RMarkdown</div></div>
-            <div class="src-tile" data-src="git" onclick="togSrc(this)"><div class="src-ico">🗂</div><div class="src-lbl">Git / GitLab</div></div>
-            <div class="src-tile" data-src="link" onclick="togSrc(this)"><div class="src-ico">🔗</div><div class="src-lbl">Link / URL</div></div>
-          </div>
-        </div>
-        <div class="card cp" style="margin-bottom:14px;">
-          <div class="ct">Upload de Arquivos</div>
-          <div class="upz" id="drop-zone">
-            <input type="file" id="file-input" multiple accept=".pdf,.doc,.docx,.txt,.py,.r,.R,.ipynb,.md,.csv" onchange="handleFiles(this.files)">
-            <div style="font-size:26px;">⬆️</div>
-            <div class="upz-t">Toque para selecionar ou arraste aqui</div>
-            <div class="upz-h">PDF · DOCX · .py · .R · .ipynb · .md</div>
-          </div>
-          <div class="flist" id="file-list"></div>
-        </div>
-        <div class="card cp" style="margin-bottom:14px;">
-          <div class="ct">Links de Repositórios</div>
-          <div class="lrow">
-            <input type="text" id="link-input" placeholder="https://sharepoint... ou https://gitlab..." inputmode="url" autocapitalize="none" autocorrect="off">
-            <button class="add-link-btn" type="button" onclick="addLink()">+ Add</button>
-          </div>
-          <div class="chips" id="link-chips"></div>
-        </div>
-        <div class="card cp">
-          <div class="ct">Contexto Adicional (opcional)</div>
-          <textarea id="extra-ctx" placeholder="Cole trechos de código, descrições ou qualquer contexto útil..."></textarea>
-        </div>
-        <div class="btn-row">
-          <button class="btn btn-s" type="button" onclick="goStep(1)">← Voltar</button>
-          <button class="btn btn-p" type="button" onclick="startAnalysis()">Analisar com Agentes →</button>
-        </div>
-      </div>
-
-      <div class="wp" id="wp3">
-        <div class="awrap">
-          <div class="spinner" id="spinner"></div>
-          <h3 id="atitle">Agentes trabalhando para você</h3>
-          <p id="asub">Pode relaxar! Isso leva alguns segundos. ☕</p>
-          <div class="asteps">
-            <div class="as on" id="as1"><div class="as-dot"></div><div><div class="as-l">🗂 Agente de Ingestão</div><div class="as-s">Lendo arquivos e links</div></div></div>
-            <div class="as" id="as2"><div class="as-dot"></div><div><div class="as-l">🔍 Agente RAG</div><div class="as-s">Extraindo informações das fontes</div></div></div>
-            <div class="as" id="as3"><div class="as-dot"></div><div><div class="as-l">🏷 Agente Classificador</div><div class="as-s">Identificando família e técnica</div></div></div>
-            <div class="as" id="as4"><div class="as-dot"></div><div><div class="as-l">⚖️ Agente de Criticidade</div><div class="as-s">Calculando as 6 dimensões</div></div></div>
-            <div class="as" id="as5"><div class="as-dot"></div><div><div class="as-l">📋 Geração do Model Card</div><div class="as-s">Consolidando e preparando notificações</div></div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="wp" id="wp4">
-        <div class="sbanner" id="sbanner"><div style="font-size:18px;">✅</div><div class="sb-txt" id="sb-txt"></div></div>
-        <div id="mc-container"></div>
-      </div>
+<div class="pnl" id="pn3">
+  <div class="awrap">
+    <div class="spin" id="spin"></div>
+    <h3 id="atit">Agentes trabalhando...</h3>
+    <p id="asub">Pode relaxar! Isso leva alguns segundos.</p>
+    <div style="max-width:360px;margin:0 auto;text-align:left;">
+      <div class="astep on" id="as1"><div class="adot"></div><div><div class="al">Agente de Ingestao</div><div class="as">Lendo arquivos e links</div></div></div>
+      <div class="astep" id="as2"><div class="adot"></div><div><div class="al">Agente RAG</div><div class="as">Extraindo informacoes das fontes</div></div></div>
+      <div class="astep" id="as3"><div class="adot"></div><div><div class="al">Agente Classificador</div><div class="as">Identificando familia e tecnica</div></div></div>
+      <div class="astep" id="as4"><div class="adot"></div><div><div class="al">Agente de Criticidade</div><div class="as">Calculando as 6 dimensoes</div></div></div>
+      <div class="astep" id="as5"><div class="adot"></div><div><div class="al">Geracao do Model Card</div><div class="as">Consolidando e preparando notificacoes</div></div></div>
     </div>
   </div>
 </div>
 
-<div class="pg" id="pg-validation">
-  <div class="ph"><div class="ph-eye">Área de Validação</div><div class="ph-title">Fila de Validação</div><div class="ph-desc">Analise, aprecie e ratifique os Model Cards catalogados.</div></div>
-  <div class="vf">
-    <button class="fbtn on" type="button" onclick="filterVal('all',this)">Todos</button>
-    <button class="fbtn" type="button" onclick="filterVal('N1',this)">🔴 N1</button>
-    <button class="fbtn" type="button" onclick="filterVal('N2',this)">🟠 N2</button>
-    <button class="fbtn" type="button" onclick="filterVal('N3',this)">🟡 N3</button>
-    <button class="fbtn" type="button" onclick="filterVal('N4',this)">🟢 N4</button>
-    <button class="fbtn" type="button" onclick="filterVal('pending',this)">⏳ Aguardando</button>
-    <button class="fbtn" type="button" onclick="filterVal('approved',this)">✅ Ratificados</button>
-  </div>
-  <div class="card" style="overflow:hidden;">
-    <table class="vtable"><thead><tr><th>Chave</th><th>Modelo</th><th>Criticidade</th><th>Status</th><th>Data</th><th>Ação</th></tr></thead><tbody id="vtbody"></tbody></table>
-  </div>
-</div>
-
-<div class="pg" id="pg-bi">
-  <div class="ph"><div class="ph-eye">Painel Executivo</div><div class="ph-title">Inventário de Modelos</div><div class="ph-desc">Visão consolidada do portfólio.</div></div>
-  <div class="kpig">
-    <div class="kpi kb"><div class="kpi-l">Total</div><div class="kpi-v" id="bi-total">5</div><div class="kpi-s">no inventário</div></div>
-    <div class="kpi kr"><div class="kpi-l">Críticos N1</div><div class="kpi-v" id="bi-n1" style="color:var(--red);">2</div><div class="kpi-s">prioritários</div></div>
-    <div class="kpi kg"><div class="kpi-l">Ratificados</div><div class="kpi-v" id="bi-rat" style="color:var(--green);">2</div><div class="kpi-s">validados</div></div>
-    <div class="kpi ko"><div class="kpi-l">Aguardando</div><div class="kpi-v" id="bi-pend" style="color:var(--orange);">3</div><div class="kpi-s">em análise</div></div>
-  </div>
-  <div class="chart-card">
-    <div class="chart-t">Por Família</div>
-    <div class="bar-chart">
-      <div class="bar-row"><div class="bar-lbl">Machine Learning</div><div class="bar-trk"><div class="bar-fill" style="width:50%;background:var(--blue);">2</div></div><div class="bar-val">2</div></div>
-      <div class="bar-row"><div class="bar-lbl">Estatístico</div><div class="bar-trk"><div class="bar-fill" style="width:25%;background:var(--teal);">1</div></div><div class="bar-val">1</div></div>
-      <div class="bar-row"><div class="bar-lbl">Mat./Financeiro</div><div class="bar-trk"><div class="bar-fill" style="width:25%;background:var(--orange);">1</div></div><div class="bar-val">1</div></div>
-      <div class="bar-row"><div class="bar-lbl">IA Gen./LLM</div><div class="bar-trk"><div class="bar-fill" style="width:25%;background:var(--red);">1</div></div><div class="bar-val">1</div></div>
-    </div>
-  </div>
-  <div class="card" style="overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--g100);">
-      <div style="font-size:13px;font-weight:600;">Inventário Completo</div>
-      <button class="btn btn-s" style="padding:6px 14px;font-size:12px;" type="button" onclick="exportBICSV()">Exportar CSV</button>
-    </div>
-    <table class="vtable"><thead><tr><th>Chave</th><th>Modelo</th><th>Família</th><th>Criticidade</th><th>Pontuação</th><th>Status</th></tr></thead><tbody id="bi-tbody"></tbody></table>
-  </div>
-</div>
-
-<div class="pg" id="pg-saibamais">
-  <div class="sm-hero">
-    <div style="font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Guia Completo</div>
-    <div style="font-size:24px;font-weight:700;margin-bottom:8px;letter-spacing:-0.3px;">Como o ModelScan funciona?</div>
-    <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.7;">Entenda cada etapa — dos agentes de IA ao Model Card. Simples, transparente e feito para apoiar você.</div>
-  </div>
-  <div class="card cp" style="margin-bottom:14px;">
-    <div class="ct">Jornada passo a passo</div>
-    <div class="sm-step"><div class="sm-num">1</div><div><div class="sm-st">Identificação do Modelo</div><div class="sm-sd">Preencha nome, área, owner e e-mail. Não precisa saber tudo.</div><div class="sm-note">💡 O nome pode ser informal — a validação padroniza depois.</div></div></div>
-    <div class="sm-step"><div class="sm-num">2</div><div><div class="sm-st">Indicação das Fontes</div><div class="sm-sd">Envie qualquer documento: PDF, Word, notebook Jupyter, código Python/R, links do SharePoint, GitLab, Databricks ou Google Cloud.</div><div class="a-pills"><span class="a-pill">📄 PDF/Word</span><span class="a-pill">🐍 Python</span><span class="a-pill">📊 R</span><span class="a-pill">☁️ SharePoint</span><span class="a-pill">⚡ Databricks</span><span class="a-pill">🔵 GCP</span></div></div></div>
-    <div class="sm-step"><div class="sm-num">3</div><div><div class="sm-st">Pipeline de 5 Agentes de IA</div><div class="sm-sd">Cinco agentes especializados rodam em sequência:</div><div style="margin-top:8px;display:flex;flex-direction:column;gap:7px;"><div class="sm-note"><strong>🗂 Ingestão</strong> — lê e parseia todos os arquivos e links</div><div class="sm-note"><strong>🔍 RAG</strong> — responde as perguntas de catalogação com base nos documentos</div><div class="sm-note"><strong>🏷 Classificador</strong> — enquadra na família e identifica a técnica</div><div class="sm-note"><strong>⚖️ Criticidade</strong> — aplica a matriz D1-D6 e gera o nível N1-N5</div><div class="sm-note"><strong>📋 Síntese</strong> — consolida o Model Card e prepara notificações</div></div></div></div>
-    <div class="sm-step"><div class="sm-num">4</div><div><div class="sm-st">Model Card + Moderação</div><div class="sm-sd">Card gerado com chave única (ex: MDL-A3F9K2). Revise em 5-10 minutos e confirme.</div></div></div>
-    <div class="sm-step"><div class="sm-num">5</div><div><div class="sm-st">Notificações Automáticas</div><div class="sm-sd">E-mails enviados automaticamente ao Owner e à Área de Validação.</div></div></div>
-    <div class="sm-step" style="border-bottom:none;"><div class="sm-num">6</div><div><div class="sm-st">Ratificação pela Validação</div><div class="sm-sd">Analistas revisam, corrigem o nível e ratificam. Outras unidades (Auditoria, Compliance) também podem manifestar-se.</div></div></div>
-  </div>
-  <div class="card cp">
-    <div class="ct">Perguntas frequentes</div>
-    <div class="faq-i"><div class="faq-q" onclick="this.closest('.faq-i').classList.toggle('open');">Preciso ter documentação formal? <span class="faq-ico">+</span></div><div class="faq-a">Não! Funciona com README, comentários de código, PPT ou qualquer coisa que descreva o modelo.</div></div>
-    <div class="faq-i"><div class="faq-q" onclick="this.closest('.faq-i').classList.toggle('open');">O que é a chave única? <span class="faq-ico">+</span></div><div class="faq-a">Cada modelo recebe um ID único (ex: MDL-A3F9K2) — referência em todo o ciclo: validação, monitoramento, descomissionamento.</div></div>
-    <div class="faq-i"><div class="faq-q" onclick="this.closest('.faq-i').classList.toggle('open');">E se eu discordar da criticidade? <span class="faq-ico">+</span></div><div class="faq-a">Solicite revisão na moderação. A Validação pode corrigir o nível durante a ratificação.</div></div>
-    <div class="faq-i"><div class="faq-q" onclick="this.closest('.faq-i').classList.toggle('open');">Quanto tempo leva? <span class="faq-ico">+</span></div><div class="faq-a">Análise pelos agentes: 15-45 segundos. Moderação: 5-10 minutos. Total: menos de 20 minutos.</div></div>
-  </div>
-</div>
-
-<div class="pg" id="pg-storage">
-  <div class="ph"><div class="ph-eye">Transparência</div><div class="ph-title">Onde ficam os arquivos?</div><div class="ph-desc">Mapa de armazenamento e acesso por perfil.</div></div>
-  <div class="notice n-info" style="margin-bottom:14px;"><span class="n-ico">🔒</span><div>Os arquivos são lidos localmente para extração de texto. O que fica salvo é o <strong>Model Card estruturado</strong>.</div></div>
-  <div class="stor-grid">
-    <div class="stor-item"><div class="stor-t">Model Cards</div><div class="stor-path">/inventario/model-cards/{ID}/</div><div class="stor-d">Ficha completa com metadados e histórico.</div></div>
-    <div class="stor-item"><div class="stor-t">Mensageria</div><div class="stor-path">/inventario/mensageria/{ID}/</div><div class="stor-d">Cópia das notificações enviadas.</div></div>
-    <div class="stor-item"><div class="stor-t">Histórico Validação</div><div class="stor-path">/inventario/validacoes/{ID}/</div><div class="stor-d">Ratificações e manifestações de unidades.</div></div>
-    <div class="stor-item"><div class="stor-t">Base BI</div><div class="stor-path">/inventario/consolidado/</div><div class="stor-d">Inventário atualizado a cada catalogação.</div></div>
-    <div class="stor-item"><div class="stor-t">Arquivos Originais</div><div class="stor-path">/inventario/fontes/{ID}/</div><div class="stor-d">Documentos do Owner. Acesso restrito. Retenção: 5 anos.</div></div>
-    <div class="stor-item"><div class="stor-t">Registro de IDs</div><div class="stor-path">/inventario/registro-ids/</div><div class="stor-d">Garante unicidade das chaves.</div></div>
-  </div>
+<div class="pnl" id="pn4">
+  <div class="ok-banner" id="okb"><div style="font-size:20px;">&#9989;</div><div id="okbtxt"></div></div>
+  <div id="mcc"></div>
 </div>
 ```
 
   </div>
+
+  <div class="pg" id="pg-validation">
+    <div class="ph"><div class="ph-e">Validacao</div><div class="ph-t">Fila de Validacao</div><div class="ph-d">Analise e ratifique os Model Cards catalogados.</div></div>
+    <div class="vfilters">
+      <button class="fbtn on" type="button" onclick="fv('all',this)">Todos</button>
+      <button class="fbtn" type="button" onclick="fv('N1',this)">N1</button>
+      <button class="fbtn" type="button" onclick="fv('N2',this)">N2</button>
+      <button class="fbtn" type="button" onclick="fv('N3',this)">N3</button>
+      <button class="fbtn" type="button" onclick="fv('N4',this)">N4</button>
+      <button class="fbtn" type="button" onclick="fv('pending',this)">Aguardando</button>
+      <button class="fbtn" type="button" onclick="fv('approved',this)">Ratificados</button>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="vt"><thead><tr><th>Chave</th><th>Modelo</th><th>Criticidade</th><th>Status</th><th>Acao</th></tr></thead><tbody id="vtb"></tbody></table>
+    </div>
+  </div>
+
+  <div class="pg" id="pg-bi">
+    <div class="ph"><div class="ph-e">Executivo</div><div class="ph-t">Inventario de Modelos</div><div class="ph-d">Visao consolidada do portfolio.</div></div>
+    <div class="kpig">
+      <div class="kpi kb"><div class="kpi-l">Total</div><div class="kpi-v" id="biT">5</div><div class="kpi-s">no inventario</div></div>
+      <div class="kpi kr"><div class="kpi-l">Criticos N1</div><div class="kpi-v" id="biN1" style="color:#B83232;">2</div><div class="kpi-s">prioritarios</div></div>
+      <div class="kpi kg"><div class="kpi-l">Ratificados</div><div class="kpi-v" id="biR" style="color:#1B7F4F;">2</div><div class="kpi-s">validados</div></div>
+      <div class="kpi ko"><div class="kpi-l">Aguardando</div><div class="kpi-v" id="biP" style="color:#F47920;">3</div><div class="kpi-s">em analise</div></div>
+    </div>
+    <div class="chart"><div class="chart-t">Por Familia</div>
+      <div class="br"><div class="br-l">Machine Learning</div><div class="br-trk"><div class="br-f" style="width:50%;background:#005CA9;">2</div></div><div class="br-v">2</div></div>
+      <div class="br"><div class="br-l">Estatistico</div><div class="br-trk"><div class="br-f" style="width:25%;background:#0D7377;">1</div></div><div class="br-v">1</div></div>
+      <div class="br"><div class="br-l">Mat./Financeiro</div><div class="br-trk"><div class="br-f" style="width:25%;background:#F47920;">1</div></div><div class="br-v">1</div></div>
+      <div class="br"><div class="br-l">IA Gen./LLM</div><div class="br-trk"><div class="br-f" style="width:25%;background:#B83232;">1</div></div><div class="br-v">1</div></div>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;"><div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #ECEEF2;"><span style="font-size:13px;font-weight:700;">Inventario</span><button class="bexp" type="button" onclick="csvBI()">CSV</button></div><table class="vt"><thead><tr><th>Chave</th><th>Modelo</th><th>Familia</th><th>Crit.</th><th>Pont.</th><th>Status</th></tr></thead><tbody id="biTb"></tbody></table></div>
+  </div>
+
+  <div class="pg" id="pg-saibamais">
+    <div class="sm-hero">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:6px;">Guia Completo</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:7px;">Como o ModelScan funciona?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;">Entenda cada etapa — dos agentes de IA ao Model Card. Simples e transparente.</div>
+    </div>
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-t">Jornada passo a passo</div>
+      <div class="sm-step"><div class="sm-num">1</div><div><div class="sm-t">Identificacao do Modelo</div><div class="sm-d">Preencha nome, area, owner e e-mail. Nao precisa saber tudo — os agentes complementam.</div><div class="sm-n">&#128161; O nome pode ser informal — a validacao padroniza depois.</div></div></div>
+      <div class="sm-step"><div class="sm-num">2</div><div><div class="sm-t">Indicacao das Fontes</div><div class="sm-d">Envie PDF, Word, notebooks Jupyter, Python/R, links SharePoint, GitLab, Databricks ou GCP.</div><div class="pills"><span class="pill">PDF/Word</span><span class="pill">Python</span><span class="pill">R</span><span class="pill">SharePoint</span><span class="pill">Databricks</span><span class="pill">GCP</span></div></div></div>
+      <div class="sm-step"><div class="sm-num">3</div><div><div class="sm-t">5 Agentes de IA em sequencia</div><div class="sm-d">Ingestion, RAG, Classificador, Criticidade e Sintese — cada um especializado, rodando em cadeia.</div></div></div>
+      <div class="sm-step"><div class="sm-num">4</div><div><div class="sm-t">Model Card + Moderacao</div><div class="sm-d">Card gerado com chave unica (ex: MDL-A3F9K2). Revise em 5-10 minutos e confirme.</div></div></div>
+      <div class="sm-step"><div class="sm-num">5</div><div><div class="sm-t">Notificacoes e Ratificacao</div><div class="sm-d">E-mails automaticos ao Owner e a Validacao. Analistas ratificam e outras unidades manifestam-se.</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-t">Perguntas frequentes</div>
+      <div class="faq-i"><div class="faq-q" onclick="this.closest('.faq-i').classList.toggle('open');">Preciso ter documentacao formal? <span class="faq-ico">+</span></div><div class="faq-a">Nao! Funciona com README, comentarios de codigo ou qualquer coisa que descreva o modelo.</div></div>
+      <div class="faq-i"><div class="faq-q" onclick="this.closest('.faq-i').classList.toggle('open');">O que e a chave unica? <span class="faq-ico">+</span></div><div class="faq-a">Cada modelo recebe um ID (ex: MDL-A3F9K2) — referencia em todo o ciclo: validacao, monitoramento, descomissionamento.</div></div>
+      <div class="faq-i"><div class="faq-q" onclick="this.closest('.faq-i').classList.toggle('open');">Quanto tempo leva? <span class="faq-ico">+</span></div><div class="faq-a">Analise pelos agentes: 15-45 segundos. Moderacao: 5-10 minutos. Total: menos de 20 minutos.</div></div>
+    </div>
+  </div>
+
+  <div class="pg" id="pg-storage">
+    <div class="ph"><div class="ph-e">Transparencia</div><div class="ph-t">Onde ficam os arquivos?</div><div class="ph-d">Mapa de armazenamento por perfil.</div></div>
+    <div class="sg">
+      <div class="si"><div class="si-t">Model Cards</div><div class="si-p">/inventario/model-cards/</div><div class="si-d">Ficha completa com metadados e historico de moderacao.</div></div>
+      <div class="si"><div class="si-t">Mensageria</div><div class="si-p">/inventario/mensageria/</div><div class="si-d">Copia de cada notificacao enviada para auditoria.</div></div>
+      <div class="si"><div class="si-t">Historico Validacao</div><div class="si-p">/inventario/validacoes/</div><div class="si-d">Ratificacoes, correcoes e manifestacoes.</div></div>
+      <div class="si"><div class="si-t">Base BI</div><div class="si-p">/inventario/consolidado/</div><div class="si-d">Inventario atualizado a cada catalogacao.</div></div>
+      <div class="si"><div class="si-t">Arquivos Originais</div><div class="si-p">/inventario/fontes/</div><div class="si-d">Documentos do Owner. Acesso restrito por perfil.</div></div>
+      <div class="si"><div class="si-t">Registro de IDs</div><div class="si-p">/inventario/ids/</div><div class="si-d">Garante unicidade das chaves ao longo do ciclo.</div></div>
+    </div>
+  </div>
+
 </div>
 
-<div class="modal-ov" id="val-modal">
+<div class="modal-bg" id="vmod">
   <div class="modal">
-    <button class="modal-close" type="button" onclick="closeModal()">x</button>
-    <div style="font-family:var(--mono);font-size:11px;color:var(--g300);margin-bottom:3px;" id="m-uid"></div>
-    <div style="font-size:18px;font-weight:600;margin-bottom:3px;" id="m-name"></div>
-    <div style="font-size:13px;color:var(--g500);margin-bottom:18px;" id="m-area"></div>
-    <div id="m-preview" style="margin-bottom:18px;"></div>
-    <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Manifestações</div>
-    <div id="unit-comments">
-      <div class="uc"><div class="uc-hd"><div class="uc-av">AI</div><div class="uc-nm">Auditoria Interna</div><div class="uc-t">ha 2 dias</div></div><div class="uc-txt">Modelo em producao desde jan/2024. Sugerimos revisao de D6.</div></div>
-    </div>
+    <button class="modal-x" type="button" onclick="closeM()">&#215;</button>
+    <div style="font-family:monospace;font-size:11px;color:#B8BEC9;margin-bottom:3px;" id="mid"></div>
+    <div style="font-size:18px;font-weight:800;margin-bottom:3px;" id="mnm"></div>
+    <div style="font-size:13px;color:#717A8C;margin-bottom:18px;" id="mar"></div>
+    <div id="mprev" style="margin-bottom:18px;"></div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Manifestacoes</div>
+    <div id="ucoms"><div class="uc"><div class="uc-hd"><div class="uc-av">AI</div><div class="uc-nm">Auditoria Interna</div><div class="uc-t">ha 2 dias</div></div><div class="uc-txt">Modelo em producao desde jan/2024. Sugerimos revisao de D6.</div></div></div>
     <div style="margin-top:12px;">
       <div class="g2" style="margin-bottom:10px;">
-        <div class="field" style="margin:0;"><label>Sua unidade</label><input type="text" id="unit-name" placeholder="ex: Compliance..."></div>
-        <div class="field" style="margin:0;"><label>Seu nome</label><input type="text" id="unit-person" placeholder="Nome completo"></div>
+        <div class="field" style="margin:0;"><label>Sua unidade</label><input type="text" id="uname" placeholder="ex: Compliance"></div>
+        <div class="field" style="margin:0;"><label>Seu nome</label><input type="text" id="uperson" placeholder="Nome"></div>
       </div>
-      <div class="field"><label>Manifestação</label><textarea id="unit-obs" placeholder="Adicione observações..."></textarea></div>
-      <button class="btn btn-s" style="padding:8px 16px;font-size:12px;" type="button" onclick="addUnitComment()">+ Registrar</button>
+      <div class="field"><label>Manifestacao</label><textarea id="uobs" placeholder="Adicione observacoes..."></textarea></div>
+      <button class="btn btn-s" style="padding:9px 18px;font-size:13px;" type="button" onclick="addCom()">+ Registrar</button>
     </div>
-    <div style="border-top:1px solid var(--g100);padding-top:16px;margin-top:16px;">
-      <div style="font-size:13px;font-weight:600;margin-bottom:12px;">Decisão da Validação</div>
+    <div style="border-top:1px solid #ECEEF2;padding-top:16px;margin-top:16px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:12px;">Decisao da Validacao</div>
       <div class="g2" style="margin-bottom:12px;">
-        <div class="field" style="margin:0;"><label>Corrigir Criticidade</label>
-          <select id="val-crit"><option value="">manter sugerido</option><option>N1</option><option>N2</option><option>N3</option><option>N4</option><option>N5</option></select>
-        </div>
-        <div class="field" style="margin:0;"><label>Analista Responsável</label><input type="text" id="val-analyst" placeholder="Nome do analista"></div>
+        <div class="field" style="margin:0;"><label>Corrigir Criticidade</label><select id="vcrit"><option value="">manter sugerido</option><option>N1</option><option>N2</option><option>N3</option><option>N4</option><option>N5</option></select></div>
+        <div class="field" style="margin:0;"><label>Analista</label><input type="text" id="vana" placeholder="Nome do analista"></div>
       </div>
-      <div class="field"><label>Parecer Técnico (obrigatório)</label><textarea id="val-parecer" placeholder="Registre o parecer e fundamentação..."></textarea></div>
+      <div class="field"><label>Parecer Tecnico (obrigatorio)</label><textarea id="vparecer" placeholder="Registre o parecer..."></textarea></div>
       <div class="dec-btns" style="margin-top:12px;">
-        <button class="dec-btn approve" type="button" onclick="ratifyModel('approve')">Ratificar</button>
-        <button class="dec-btn reject" type="button" onclick="ratifyModel('reject')">Solicitar correção</button>
+        <button class="dec-btn ap" type="button" onclick="ratify('approve')">Ratificar</button>
+        <button class="dec-btn rj" type="button" onclick="ratify('reject')">Solicitar correcao</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-var files=[],links=[],sources=[],result=null,decision=null,currentModelId=null;
-var pageTitles={catalog:['Nova Catalogação','Informe as fontes e deixe os agentes fazerem o trabalho'],validation:['Área de Validação','Fila de validação e ratificação'],bi:['Painel BI','Inventário executivo e analítico'],saibamais:['Saiba Mais','Como o ModelScan funciona'],storage:['Onde ficam os arquivos','Mapa de armazenamento']};
+var F=[],L=[],S=[],R=null,D=null,CID=null;
 
-var demoInventory=[
-  {uid:'MDL-B7X3K1',name:'Scoring de Crédito PF',area:'SUPEC',family:'Machine Learning',technique:'XGBoost',crit:'N1',critName:'Crítico',score:4.0,regulatory:'Basileia III',status:'pending',date:'12/04/2025',owner:'Ana Lima'},
-  {uid:'MDL-C2M8P4',name:'Inadimplência Consignado',area:'DIREC',family:'Estatístico',technique:'Regressão Logística',crit:'N2',critName:'Alto',score:3.5,regulatory:'IFRS 9',status:'pending',date:'10/04/2025',owner:'Carlos Mota'},
-  {uid:'MDL-A5R1Q9',name:'VaR — Renda Fixa',area:'DIRIN',family:'Matemático',technique:'Simulação Histórica',crit:'N1',critName:'Crítico',score:4.2,regulatory:'Basileia III',status:'approved',date:'05/04/2025',owner:'Fernanda Souza'},
-  {uid:'MDL-E9T6H2',name:'Risco de Fornecedores',area:'DIVCO',family:'Machine Learning',technique:'Random Forest',crit:'N3',critName:'Médio',score:2.8,regulatory:'Nenhum',status:'pending',date:'08/04/2025',owner:'Roberto Silva'},
-  {uid:'MDL-F4W2L7',name:'Agente LLM — Contratos',area:'DIJUR',family:'IA Gen./LLM',technique:'Claude RAG',crit:'N2',critName:'Alto',score:3.7,regulatory:'Nenhum',status:'approved',date:'01/04/2025',owner:'Patricia Nunes'},
+var INV=[
+  {uid:'MDL-B7X3K1',name:'Scoring de Credito PF',area:'SUPEC',family:'Machine Learning',crit:'N1',critN:'Critico',score:4.0,reg:'Basileia III',status:'pending',date:'12/04/2025',owner:'Ana Lima'},
+  {uid:'MDL-C2M8P4',name:'Inadimplencia Consignado',area:'DIREC',family:'Estatistico',crit:'N2',critN:'Alto',score:3.5,reg:'IFRS 9',status:'pending',date:'10/04/2025',owner:'Carlos Mota'},
+  {uid:'MDL-A5R1Q9',name:'VaR Renda Fixa',area:'DIRIN',family:'Matematico',crit:'N1',critN:'Critico',score:4.2,reg:'Basileia III',status:'approved',date:'05/04/2025',owner:'Fernanda Souza'},
+  {uid:'MDL-E9T6H2',name:'Risco de Fornecedores',area:'DIVCO',family:'ML',crit:'N3',critN:'Medio',score:2.8,reg:'Nenhum',status:'pending',date:'08/04/2025',owner:'Roberto Silva'},
+  {uid:'MDL-F4W2L7',name:'Agente LLM Contratos',area:'DIJUR',family:'IA Gen.',crit:'N2',critN:'Alto',score:3.7,reg:'Nenhum',status:'approved',date:'01/04/2025',owner:'Patricia Nunes'},
 ];
 
+var PTITLES={catalog:['Catalogacao','Informe as fontes e deixe os agentes fazerem o trabalho'],validation:['Validacao','Fila de validacao e ratificacao'],bi:['Painel BI','Inventario executivo'],saibamais:['Saiba Mais','Como o ModelScan funciona'],storage:['Arquivos','Onde ficam os dados']};
+
 function g(id){return document.getElementById(id);}
-function v(id){var e=document.getElementById(id);if(!e)return '';var val=e.value;return val?String(val).trim():'';}
+function gv(id){var e=g(id);if(!e)return '';var v=e.value;return v?String(v).trim():'';}
 function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
-function genUID(){return 'MDL-'+Math.random().toString(36).substr(2,6).toUpperCase();}
+function uid(){return 'MDL-'+Math.random().toString(36).substr(2,6).toUpperCase();}
 
-function toggleMenu(){
-  var d=g('nav-drawer');
-  d.classList.toggle('open');
+function openMenu(){
+  var d=g('mdrawer');
+  if(d.classList.contains('open')){d.classList.remove('open');g('mbtn').innerHTML='&#9776;';}
+  else{d.classList.add('open');g('mbtn').innerHTML='&#10005;';}
 }
 
-function navTo(id,btn){
-  g('nav-drawer').classList.remove('open');
-  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('on');});
+function mnav(id,btn){
+  g('mdrawer').classList.remove('open');
+  g('mbtn').innerHTML='&#9776;';
+  document.querySelectorAll('.mitem').forEach(function(b){b.classList.remove('on');});
   btn.classList.add('on');
-  showPg(id, null);
+  showPage(id);
 }
 
-function showPg(id,btn){
+function nav(id,btn){
+  document.querySelectorAll('.sb-nb').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  showPage(id);
+}
+
+function showPage(id){
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
-  document.querySelectorAll('.sb-nav-btn').forEach(function(b){b.classList.remove('on');});
   var pg=g('pg-'+id);
-  if(pg) pg.classList.add('on');
-  if(btn) btn.classList.add('on');
-  var t=pageTitles[id];
-  if(t){
-    var tt=g('tb-title');var ts=g('tb-sub');
-    if(tt)tt.textContent=t[0];if(ts)ts.textContent=t[1];
-  }
-  if(id==='validation')renderValTable();
+  if(pg)pg.classList.add('on');
+  var t=PTITLES[id];
+  if(t){var dt=g('dkt'),ds=g('dks');if(dt)dt.textContent=t[0];if(ds)ds.textContent=t[1];}
+  if(id==='validation')renderVT(INV);
   if(id==='bi')renderBI();
   window.scrollTo(0,0);
 }
 
-function goStep(n){
-  try{
-    if(n===2){
-      var nm=v('model-name'),ar=v('model-area'),ow=v('model-owner'),oe=v('owner-email');
-      if(!nm){alert('Informe o Nome do Modelo.');return;}
-      if(!ar){alert('Informe a Área.');return;}
-      if(!ow){alert('Informe o Model Owner.');return;}
-      if(!oe){alert('Informe seu e-mail.');return;}
+function goPnl(n){
+  for(var i=1;i<=4;i++){
+    var p=g('pn'+i);if(p){if(i===n)p.classList.add('on');else p.classList.remove('on');}
+    var s=g('st'+i);
+    if(s){
+      s.classList.remove('on','dn');
+      var sn=s.querySelector('.step-n');
+      if(i===n){s.classList.add('on');if(sn)sn.textContent=String(i);}
+      else if(i<n){s.classList.add('dn');if(sn)sn.textContent='v';}
+      else{if(sn)sn.textContent=String(i);}
     }
-    for(var i=1;i<=4;i++){
-      var wp=g('wp'+i);
-      if(wp){if(i===n){wp.classList.add('on');}else{wp.classList.remove('on');}}
-      var ws=g('ws'+i);
-      if(ws){
-        ws.classList.remove('on','dn');
-        var wn=ws.querySelector('.ws-num');
-        if(i===n){ws.classList.add('on');if(wn)wn.textContent=String(i);}
-        else if(i<n){ws.classList.add('dn');if(wn)wn.textContent='v';}
-        else{if(wn)wn.textContent=String(i);}
-      }
-    }
-    try{window.scrollTo(0,0);}catch(e){}
-  }catch(err){alert('Erro: '+err.message);}
-}
-
-function togSrc(el){
-  el.classList.toggle('sel');
-  var s=el.getAttribute('data-src');
-  var idx=sources.indexOf(s);
-  if(el.classList.contains('sel')){if(idx<0)sources.push(s);}
-  else{if(idx>=0)sources.splice(idx,1);}
-}
-
-function handleFiles(fl){
-  var arr=Array.prototype.slice.call(fl);
-  arr.forEach(function(f){if(!files.find(function(x){return x.name===f.name;}))files.push(f);});
-  renderFiles();
-}
-function renderFiles(){
-  var html='';
-  for(var i=0;i<files.length;i++){
-    var f=files[i];
-    html+='<div class="fi"><span style="font-size:14px;flex-shrink:0;">'+ficon(f.name)+'</span><span class="fi-nm">'+f.name+'</span><span class="fi-sz">'+fbytes(f.size)+'</span><button class="fi-rm" type="button" onclick="rmFile('+i+')">x</button></div>';
   }
-  g('file-list').innerHTML=html;
+  window.scrollTo(0,0);
 }
-function rmFile(i){files.splice(i,1);renderFiles();}
-function ficon(n){var e=n.split('.').pop().toLowerCase();var m={pdf:'📄',doc:'📝',docx:'📝',py:'🐍',r:'📊',ipynb:'📓',md:'📋',csv:'📊',txt:'📄'};return m[e]||'📎';}
-function fbytes(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(1)+' MB';}
+
+function step2(){
+  var nm=gv('nm'),ar=gv('ar'),ow=gv('ow'),oe=gv('oe');
+  if(!nm){alert('Informe o Nome do Modelo.');return;}
+  if(!ar){alert('Informe a Area.');return;}
+  if(!ow){alert('Informe o Model Owner.');return;}
+  if(!oe){alert('Informe seu e-mail.');return;}
+  goPnl(2);
+}
+
+function togTile(el){
+  el.classList.toggle('sel');
+  var s=el.getAttribute('data-s');
+  var i=S.indexOf(s);
+  if(el.classList.contains('sel')){if(i<0)S.push(s);}
+  else{if(i>=0)S.splice(i,1);}
+}
+
+function addFiles(fl){
+  for(var i=0;i<fl.length;i++){
+    var f=fl[i];
+    if(!F.find(function(x){return x.name===f.name;}))F.push(f);
+  }
+  renderFL();
+}
+
+function renderFL(){
+  var h='';
+  for(var i=0;i<F.length;i++){
+    h+='<div class="fi"><span>'+ficon(F[i].name)+'</span><span class="fi-n">'+F[i].name+'</span><button class="fi-r" type="button" onclick="rmF('+i+')">x</button></div>';
+  }
+  g('flist').innerHTML=h;
+}
+
+function rmF(i){F.splice(i,1);renderFL();}
+function ficon(n){var e=n.split('.').pop().toLowerCase();var m={pdf:'PDF',doc:'DOC',docx:'DOCX',py:'PY',r:'R',ipynb:'NB',md:'MD',csv:'CSV',txt:'TXT'};return m[e]||'FILE';}
 
 function addLink(){
-  var inp=g('link-input'),val=inp.value.trim();
+  var inp=g('linp'),val=inp.value.trim();
   if(!val)return;
-  if(links.indexOf(val)<0){links.push(val);renderLinks();}
+  if(L.indexOf(val)<0){L.push(val);renderChips();}
   inp.value='';
 }
-function renderLinks(){
-  var html='';
-  for(var i=0;i<links.length;i++){
-    html+='<div class="chip"><span class="chip-t" title="'+links[i]+'">'+links[i]+'</span><button class="chip-r" type="button" onclick="rmLink('+i+')">x</button></div>';
+
+function renderChips(){
+  var h='';
+  for(var i=0;i<L.length;i++){
+    h+='<div class="chip"><span class="chip-t" title="'+L[i]+'">'+L[i]+'</span><button class="chip-r" type="button" onclick="rmL('+i+')">x</button></div>';
   }
-  g('link-chips').innerHTML=html;
+  g('chips').innerHTML=h;
 }
-function rmLink(i){links.splice(i,1);renderLinks();}
+
+function rmL(i){L.splice(i,1);renderChips();}
 function toggleKey(){var i=g('api-key');i.type=i.type==='password'?'text':'password';}
 
 document.addEventListener('DOMContentLoaded',function(){
-  var li=g('link-input');
+  var li=g('linp');
   if(li)li.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addLink();}});
-  var dz=g('drop-zone');
-  if(dz){
-    dz.addEventListener('dragover',function(e){e.preventDefault();});
-    dz.addEventListener('drop',function(e){e.preventDefault();handleFiles(e.dataTransfer.files);});
-  }
-  renderValTable();
+  renderVT(INV);
   renderBI();
 });
 
-async function startAnalysis(){
-  goStep(3);
-  var sids=['as1','as2','as3','as4','as5'];
-  for(var i=0;i<sids.length;i++){
-    if(i>0){var prev=g(sids[i-1]);if(prev){prev.classList.remove('on');prev.classList.add('dn');}}
-    var cur=g(sids[i]);if(cur)cur.classList.add('on');
-    await wait(i===1?1800:1300);
+async function runAnalysis(){
+  goPnl(3);
+  var ids=['as1','as2','as3','as4','as5'];
+  for(var i=0;i<ids.length;i++){
+    if(i>0){var prev=g(ids[i-1]);if(prev){prev.classList.remove('on');prev.classList.add('dn');}}
+    var cur=g(ids[i]);if(cur)cur.classList.add('on');
+    await wait(i===1?1800:1200);
   }
-  var key=v('api-key');
-  result=key?await callClaude(key):buildDemo();
+  var key=gv('api-key');
+  R=key?await callAPI(key):demo();
   var last=g('as5');if(last){last.classList.remove('on');last.classList.add('dn');}
-  var sp=g('spinner');if(sp)sp.style.display='none';
-  var at=g('atitle');if(at)at.textContent='Pronto! Model Card gerado.';
+  var sp=g('spin');if(sp)sp.style.display='none';
+  var at=g('atit');if(at)at.textContent='Pronto! Model Card gerado.';
   var as=g('asub');if(as)as.textContent='Revise e confirme!';
-  await wait(800);
-  renderCard(result);
-  goStep(4);
+  await wait(700);
+  renderMC(R);
+  goPnl(4);
 }
 
-async function callClaude(key){
-  var nm=v('model-name'),ar=v('model-area'),ow=v('model-owner');
+async function callAPI(key){
+  var nm=gv('nm'),ar=gv('ar'),ow=gv('ow');
   var txt='';
-  for(var i=0;i<files.length;i++){try{var t=await readText(files[i]);txt+='\n\nARQUIVO: '+files[i].name+'\n'+t.substring(0,3000);}catch(e){}}
-  var prompt='Analise as informacoes e gere um Model Card em JSON puro sem markdown.\n\nModelo: '+nm+'\nArea: '+ar+'\nOwner: '+ow+'\nFontes: '+sources.join(',')+'\nLinks: '+links.join(',')+'\nContexto: '+v('extra-ctx')+(txt?'\n'+txt:'')+'\n\nRetorne SOMENTE este JSON:\n{"family":"ML|Estatistico|Matematico|Especialista|LLM","technique":"string","description":"string","platform":"string","inputs":"string","outputs":"string","autonomy":"string","regulatory":"string","scores":{"D1":3,"D2":3,"D3":3,"D4":3,"D5":3,"D6":3},"weighted_score":3.0,"criticality_level":"N1","criticality_name":"Critico","tags":["tag"],"controls":[{"text":"string","type":"crit"}],"validation_scope":"string","confidence":70,"confidence_note":"string"}';
+  for(var i=0;i<F.length;i++){try{var t=await readTxt(F[i]);txt+='\nARQ:'+F[i].name+'\n'+t.substring(0,3000);}catch(e){}}
+  var prompt='Analise e gere Model Card em JSON puro.\nModelo:'+nm+'\nArea:'+ar+'\nOwner:'+ow+'\nFontes:'+S.join(',')+'\nLinks:'+L.join(',')+'\nCtx:'+gv('ctx')+(txt?'\n'+txt:'')+'\n\nRetorne SOMENTE este JSON sem mais nada:\n{"family":"ML|Estatistico|Matematico|Especialista|LLM","technique":"string","description":"string","platform":"string","inputs":"string","outputs":"string","autonomy":"string","regulatory":"string","scores":{"D1":3,"D2":3,"D3":3,"D4":3,"D5":3,"D6":3},"weighted_score":3.0,"criticality_level":"N1","criticality_name":"Critico","tags":["tag"],"controls":[{"text":"texto","type":"crit"}],"validation_scope":"string","confidence":70,"confidence_note":"string"}';
   try{
     var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})});
     var data=await res.json();
@@ -800,234 +704,204 @@ async function callClaude(key){
     var r=JSON.parse(clean);
     r.model_name=nm;r.model_area=ar;r.model_owner=ow;
     return r;
-  }catch(e){console.error(e);var d=buildDemo();d.confidence=0;d.confidence_note='Erro na API. Demo.';return d;}
+  }catch(e){console.error(e);var d=demo();d.confidence=0;d.confidence_note='Erro na API — mostrando demo.';return d;}
 }
 
-function buildDemo(){
-  return{model_name:v('model-name')||'Scoring de Crédito PF',model_area:v('model-area')||'SUPEC',model_owner:v('model-owner')||'Owner Demo',family:'Machine Learning',technique:'Gradient Boosting (XGBoost)',description:'Modelo de machine learning para estimação de probabilidade de default em carteiras de crédito PF. Processa variáveis comportamentais e de bureau. Saída subsidia decisões de concessão com alçada automática até R$50 mil.',platform:'Python + Databricks (MLflow)',inputs:'Score bureau, histórico pagamentos, renda, tempo relacionamento',outputs:'Score PD (0-1000), faixa risco (A-G), limite recomendado',autonomy:'Automático até R$50 mil; humano acima',regulatory:'Basileia III — RWA IRB / IFRS 9',scores:{D1:4,D2:4,D3:4,D4:3,D5:5,D6:3},weighted_score:3.90,criticality_level:'N1',criticality_name:'Crítico',tags:['crédito-pf','pd-model','basileia-iii','xgboost','databricks'],controls:[{text:'Monitoramento contínuo PSI/KS/Gini com alertas mensais',type:'crit'},{text:'Validação independente anual com Nota de Risco',type:'crit'},{text:'Plano de contingência testado semestralmente',type:'crit'},{text:'Análise de viés a cada recalibração',type:'warn'},{text:'SHAP values para decisões contestadas',type:'warn'},{text:'Aprovação do Comitê para alterações',type:'ok'}],validation_scope:'Validação Profunda (N1): revisão conceitual, auditoria dados, backtesting 24 meses, stress test, fairness, SHAP/LIME, use test.',confidence:72,confidence_note:'Confiança moderada-alta. Campos de abrangência estimados.'};
+function demo(){
+  return{model_name:gv('nm')||'Scoring de Credito PF',model_area:gv('ar')||'SUPEC',model_owner:gv('ow')||'Owner Demo',family:'Machine Learning',technique:'Gradient Boosting (XGBoost)',description:'Modelo para estimacao de probabilidade de default em carteiras de credito PF. Processa variaveis comportamentais e de bureau. Saida subsidia decisoes de concessao com alcada automatica ate R$50 mil.',platform:'Python + Databricks (MLflow)',inputs:'Score bureau, historico pagamentos, renda, tempo relacionamento',outputs:'Score PD (0-1000), faixa risco (A-G), limite recomendado',autonomy:'Automatico ate R$50 mil; humano acima',regulatory:'Basileia III / IFRS 9',scores:{D1:4,D2:4,D3:4,D4:3,D5:5,D6:3},weighted_score:3.90,criticality_level:'N1',criticality_name:'Critico',tags:['credito-pf','pd-model','basileia-iii','xgboost'],controls:[{text:'Monitoramento continuo PSI/KS/Gini',type:'crit'},{text:'Validacao independente anual',type:'crit'},{text:'Plano de contingencia semestral',type:'crit'},{text:'Analise de vies a cada recalibracao',type:'warn'},{text:'SHAP values para contestacoes',type:'warn'},{text:'Aprovacao do Comite para alteracoes',type:'ok'}],validation_scope:'Validacao Profunda N1: revisao conceitual, auditoria dados, backtesting 24 meses, stress test, fairness, SHAP/LIME, use test.',confidence:72,confidence_note:'Confianca moderada-alta.'};
 }
-function readText(f){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(e){res(e.target.result);};r.onerror=rej;r.readAsText(f);});}
 
-function renderCard(r){
+function readTxt(f){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(e){res(e.target.result);};r.onerror=rej;r.readAsText(f);});}
+
+function renderMC(r){
   var ts=new Date().toLocaleString('pt-BR');
-  var uid=r.uid||genUID();r.uid=uid;r.ts=ts;
-  var oe=v('owner-email'),ve=v('val-email');
-  var dm={D1:'D1 Impacto Fin.',D2:'D2 Exp. Regulat.',D3:'D3 Autonomia',D4:'D4 Opacidade',D5:'D5 Abrangência',D6:'D6 Maturidade'};
-  var scH='';
+  var id=r.uid||uid();r.uid=id;r.ts=ts;
+  var oe=gv('oe'),ve=gv('ve');
+  var dm={D1:'D1 Impacto Fin.',D2:'D2 Exp.Regulat.',D3:'D3 Autonomia',D4:'D4 Opacidade',D5:'D5 Abrangencia',D6:'D6 Maturidade'};
   var sc=r.scores||{};
-  var keys=Object.keys(sc);
-  for(var k=0;k<keys.length;k++){var kk=keys[k],vv=sc[kk];scH+='<div class="sc-row"><div class="sc-d">'+(dm[kk]||kk)+'</div><div class="sc-trk"><div class="sc-fill" style="width:'+((vv/5)*100)+'%"></div></div><div class="sc-v">'+vv+'/5</div></div>';}
+  var scH=Object.keys(sc).map(function(k){return '<div class="sc-row"><div class="sc-d">'+(dm[k]||k)+'</div><div class="sc-trk"><div class="sc-f" style="width:'+((sc[k]/5)*100)+'%;"></div></div><div class="sc-v">'+sc[k]+'/5</div></div>';}).join('');
   var ctH=(r.controls||[]).map(function(c){return '<div class="ci '+(c.type||'')+'">'+(c.text||'')+'</div>';}).join('');
   var tgH=(r.tags||[]).map(function(t){return '<div class="tag">'+t+'</div>';}).join('');
-
-  var html='<div class="mc">'
-    +'<div class="mc-hero">'
-    +'<div class="mc-uid"><div class="mc-uid-dot"></div>'+uid+'</div>'
-    +'<div class="mc-top">'
-    +'<div><div class="mc-nm">'+r.model_name+'</div><div class="mc-fam">'+r.family+' · '+r.technique+'</div></div>'
-    +'<div class="mc-ring c'+(r.criticality_level||'N3')+'">'
-    +'<div class="mc-ring-c"><div class="mc-ring-n">'+(r.criticality_level||'N3')+'</div><div class="mc-ring-l">NIVEL</div></div>'
-    +'<div class="mc-ring-name">'+(r.criticality_name||'')+'</div></div></div>'
+  var h='<div class="mc">'
+    +'<div class="mc-hd">'
+    +'<div class="mc-uid"><div class="mc-udot"></div>'+id+'</div>'
+    +'<div class="mc-row '+(r.criticality_level||'N3')+'">'
+    +'<div><div class="mc-nm">'+r.model_name+'</div><div class="mc-fm">'+r.family+' &middot; '+r.technique+'</div></div>'
+    +'<div class="mc-ring"><div class="mc-rc"><div class="mc-rn">'+(r.criticality_level||'N3')+'</div><div class="mc-rl">NIVEL</div></div><div class="mc-rnm">'+(r.criticality_name||'')+'</div></div>'
+    +'</div>'
     +'<div class="mc-meta">'
-    +'<div><div class="mc-ml">Área</div><div class="mc-mv">'+r.model_area+'</div></div>'
+    +'<div><div class="mc-ml">Area</div><div class="mc-mv">'+r.model_area+'</div></div>'
     +'<div><div class="mc-ml">Owner</div><div class="mc-mv">'+r.model_owner+'</div></div>'
     +'<div><div class="mc-ml">Gerado</div><div class="mc-mv">'+ts+'</div></div>'
-    +'<div><div class="mc-ml">Conf.</div><div class="mc-mv">'+r.confidence+'%</div></div>'
+    +'<div><div class="mc-ml">Confianca</div><div class="mc-mv">'+r.confidence+'%</div></div>'
     +'</div></div>'
-    +'<div class="mc-body">'
-    +'<div class="mc-sec"><div class="mc-sec-t">Descrição</div><div class="mc-txt">'+r.description+'</div></div>'
-    +'<div class="mc-sec"><div class="mc-sec-t">Identificação</div>'
-    +'<div class="ic2">'
-    +'<div class="ic"><div class="ic-l">Técnica</div><div class="ic-v">'+r.technique+'</div></div>'
+    +'<div class="mc-bd">'
+    +'<div class="sec"><div class="sec-t">Descricao</div><div class="txt">'+r.description+'</div></div>'
+    +'<div class="sec"><div class="sec-t">Identificacao</div><div class="ig">'
+    +'<div class="ic"><div class="ic-l">Tecnica</div><div class="ic-v">'+r.technique+'</div></div>'
     +'<div class="ic"><div class="ic-l">Plataforma</div><div class="ic-v">'+r.platform+'</div></div>'
     +'<div class="ic"><div class="ic-l">Inputs</div><div class="ic-v">'+r.inputs+'</div></div>'
     +'<div class="ic"><div class="ic-l">Outputs</div><div class="ic-v">'+r.outputs+'</div></div>'
     +'<div class="ic"><div class="ic-l">Autonomia</div><div class="ic-v">'+r.autonomy+'</div></div>'
-    +'<div class="ic"><div class="ic-l">Regulatório</div><div class="ic-v">'+r.regulatory+'</div></div>'
-    +'<div class="ic"><div class="ic-l">Fontes</div><div class="ic-v">'+(sources.length?sources.join(', '):'nao especificadas')+'</div></div>'
-    +'<div class="ic"><div class="ic-l">Chave</div><div class="ic-v" style="font-family:var(--mono);color:var(--blue);">'+uid+'</div></div>'
+    +'<div class="ic"><div class="ic-l">Regulatorio</div><div class="ic-v">'+r.regulatory+'</div></div>'
+    +'<div class="ic"><div class="ic-l">Fontes</div><div class="ic-v">'+(S.length?S.join(', '):'nao especificadas')+'</div></div>'
+    +'<div class="ic"><div class="ic-l">Chave</div><div class="ic-v" style="color:#005CA9;font-family:monospace;">'+id+'</div></div>'
     +'</div></div>'
-    +'<div class="mc-sec"><div class="mc-sec-t">Criticidade</div>'
-    +'<div class="sc-rows">'+scH+'</div>'
-    +'<div class="sc-total"><div class="sc-total-l">Pontuação Ponderada</div><div class="sc-total-v">'+((r.weighted_score||0).toFixed(2))+'</div></div>'
-    +'<div class="conf-row"><div class="conf-l">Confiança</div><div class="conf-v">'+r.confidence+'%</div><div class="conf-b"><div class="conf-f" style="width:'+r.confidence+'%;"></div></div></div>'
-    +'<div class="conf-note">'+(r.confidence_note||'')+'</div></div>'
-    +'<div class="mc-sec"><div class="mc-sec-t">Tags</div><div class="tags">'+tgH+'</div></div>'
-    +'<div class="mc-sec"><div class="mc-sec-t">Controles</div><div class="ctrl-list">'+ctH+'</div></div>'
-    +'<div class="mc-sec"><div class="mc-sec-t">Escopo de Validação</div><div class="mc-txt">'+r.validation_scope+'</div></div>'
-    +'<div class="mc-sec"><div class="mc-sec-t">Mensageria</div>'
-    +'<div style="font-size:12px;color:var(--g500);margin-bottom:12px;">Notificações geradas automaticamente ao confirmar.</div>'
-    +'<div class="mtabs">'
-    +'<div class="mtab on" onclick="showMTab(\'owner\',this)">Owner</div>'
-    +'<div class="mtab" onclick="showMTab(\'val\',this)">Validação</div>'
-    +'</div>'
+    +'<div class="sec"><div class="sec-t">Criticidade</div>'+scH
+    +'<div class="sc-tot"><div class="sc-tot-l">Pontuacao Ponderada</div><div class="sc-tot-v">'+((r.weighted_score||0).toFixed(2))+'</div></div>'
+    +'<div style="display:flex;align-items:center;gap:10px;margin-top:8px;padding:9px 12px;background:#F5F6F8;border:1px solid #ECEEF2;border-radius:6px;"><span style="font-size:11px;color:#B8BEC9;">Confianca</span><span style="font-family:monospace;font-size:13px;font-weight:700;color:#1B7F4F;">'+r.confidence+'%</span><div style="flex:1;height:4px;background:#DDE1E9;border-radius:2px;overflow:hidden;"><div style="height:100%;width:'+r.confidence+'%;background:#1B7F4F;border-radius:2px;"></div></div></div>'
+    +'<div style="font-size:11px;color:#B8BEC9;margin-top:4px;">'+( r.confidence_note||'')+'</div></div>'
+    +'<div class="sec"><div class="sec-t">Tags</div><div class="tags">'+tgH+'</div></div>'
+    +'<div class="sec"><div class="sec-t">Controles</div>'+ctH+'</div>'
+    +'<div class="sec"><div class="sec-t">Escopo de Validacao</div><div class="txt">'+r.validation_scope+'</div></div>'
+    +'<div class="sec"><div class="sec-t">Mensageria</div>'
+    +'<div style="font-size:12px;color:#717A8C;margin-bottom:12px;">Notificacoes geradas ao confirmar.</div>'
+    +'<div class="mtabs"><div class="mtab on" onclick="mTab(\'owner\',this)">Para o Owner</div><div class="mtab" onclick="mTab(\'val\',this)">Para Validacao</div></div>'
     +'<div class="mcont on" id="mc-owner">'
     +'<div class="mrec"><div class="mrec-l">Para:</div><input type="text" id="to-owner" value="'+oe+'" inputmode="email" autocapitalize="none"></div>'
-    +'<div class="mprev"><div class="mp-bar"><span class="mpd" style="background:#FF5F56;"></span><span class="mpd" style="background:#FFBD2E;"></span><span class="mpd" style="background:#27C93F;"></span></div>'
-    +'<div class="mp-to">Para: '+oe+'</div>'
-    +'<div class="mp-subj">[ModelScan] Catalogação concluída — '+r.model_name+' | '+r.criticality_level+'</div>'
-    +'<div class="mp-body">'+buildOwnerEmail(r,uid,ts)+'</div></div></div>'
+    +'<div class="mprev"><div class="mp-bar"><div class="mpd" style="background:#FF5F56;"></div><div class="mpd" style="background:#FFBD2E;"></div><div class="mpd" style="background:#27C93F;"></div></div>'
+    +'<div class="mp-to">Para: '+oe+'</div><div class="mp-sub">[ModelScan] Catalogacao concluida | '+r.criticality_level+'</div>'
+    +'<div class="mp-body">'+emailOwner(r,id,ts)+'</div></div></div>'
     +'<div class="mcont" id="mc-val">'
     +'<div class="mrec"><div class="mrec-l">Para:</div><input type="text" id="to-val" value="'+ve+'" inputmode="email" autocapitalize="none"></div>'
-    +'<div class="mprev"><div class="mp-bar"><span class="mpd" style="background:#FF5F56;"></span><span class="mpd" style="background:#FFBD2E;"></span><span class="mpd" style="background:#27C93F;"></span></div>'
-    +'<div class="mp-to">Para: '+ve+'</div>'
-    +'<div class="mp-subj">[ModelScan] Novo modelo — '+r.model_name+' | '+r.criticality_level+'</div>'
-    +'<div class="mp-body">'+buildValEmail(r,uid,ts)+'</div></div></div>'
+    +'<div class="mprev"><div class="mp-bar"><div class="mpd" style="background:#FF5F56;"></div><div class="mpd" style="background:#FFBD2E;"></div><div class="mpd" style="background:#27C93F;"></div></div>'
+    +'<div class="mp-to">Para: '+ve+'</div><div class="mp-sub">[ModelScan] Novo modelo | '+r.criticality_level+'</div>'
+    +'<div class="mp-body">'+emailVal(r,id,ts)+'</div></div></div>'
     +'</div>'
-    +'<div class="modsec">'
-    +'<div class="mod-title">Sua revisão faz a diferença</div>'
-    +'<div class="mod-sub">Confirme se as informações estão corretas ou solicite revisão. 😊</div>'
+    +'<div style="border-top:1px solid #ECEEF2;padding-top:20px;margin-top:18px;">'
+    +'<div style="font-size:18px;font-weight:800;margin-bottom:4px;">Sua revisao faz a diferenca</div>'
+    +'<div style="font-size:13px;color:#717A8C;margin-bottom:16px;">Confirme se as informacoes estao corretas ou solicite revisao.</div>'
     +'<div class="g2" style="margin-bottom:12px;">'
-    +'<div class="field" style="margin:0;"><label>Corrigir Técnica</label><input type="text" id="mod-tech" placeholder="Confirme ou corrija..."></div>'
-    +'<div class="field" style="margin:0;"><label>Corrigir Autonomia</label><select id="mod-aut"><option value="">manter sugerido</option><option>100% automatizado</option><option>Revisão em exceções</option><option>Aprovação sistemática</option><option>Subsídio analítico</option><option>Apenas informativo</option></select></div>'
+    +'<div class="field" style="margin:0;"><label>Corrigir Tecnica</label><input type="text" id="mtech" placeholder="Confirme ou corrija..."></div>'
+    +'<div class="field" style="margin:0;"><label>Corrigir Autonomia</label><select id="maut"><option value="">manter</option><option>100% automatizado</option><option>Revisao em excecoes</option><option>Aprovacao sistematica</option><option>Subsidio analitico</option><option>Apenas informativo</option></select></div>'
     +'</div>'
-    +'<div class="field"><label>Observações (opcional)</label><textarea id="mod-notes" placeholder="Adicione correções ou contexto..."></textarea></div>'
+    +'<div class="field"><label>Observacoes (opcional)</label><textarea id="mnotes" placeholder="Adicione correcoes ou contexto..."></textarea></div>'
 
 ```
-+'<div style="margin-bottom:14px;"><label>Decisão</label>'
-+'<div class="dec-btns"><button class="dec-btn approve" id="btn-approve" type="button" onclick="setDec(\'approve\')">Confirmo!</button><button class="dec-btn reject" id="btn-reject" type="button" onclick="setDec(\'reject\')">Solicito revisão</button></div></div>'
-+'<div class="btn-row"><button class="btn btn-s" type="button" onclick="goStep(2)">Reenviar Fontes</button><button class="btn btn-p" id="btn-fin" type="button" onclick="finalize()" disabled>Finalizar e Registrar</button></div>'
++'<div style="margin-bottom:14px;"><label style="margin-bottom:8px;">Decisao</label>'
++'<div class="dec-btns"><button class="dec-btn ap" id="bap" type="button" onclick="setD(\'approve\')">Confirmo!</button><button class="dec-btn rj" id="brj" type="button" onclick="setD(\'reject\')">Solicito revisao</button></div></div>'
++'<div class="btn-row"><button class="btn btn-s" type="button" onclick="goPnl(2)">Reenviar Fontes</button><button class="btn btn-p" id="bfin" type="button" onclick="finish()" disabled style="opacity:0.4;">Finalizar e Registrar</button></div>'
 +'</div></div>'
-+'<div class="mc-foot"><div class="mc-foot-l" id="mc-foot">Gerado '+ts+' · '+uid+'</div>'
-+'<div class="mc-foot-r"><button class="btn-exp" type="button" onclick="exportJSON()">JSON</button><button class="btn-exp" type="button" onclick="exportTXT()">TXT</button><button class="btn-exp" type="button" onclick="window.print()">PDF</button></div></div>'
++'<div class="mc-foot"><div class="mc-foot-l" id="mcfoot">Gerado '+ts+' &middot; '+id+'</div><div class="mc-foot-r"><button class="bexp" type="button" onclick="expJ()">JSON</button><button class="bexp" type="button" onclick="expT()">TXT</button><button class="bexp" type="button" onclick="window.print()">PDF</button></div></div>'
 +'</div>';
 ```
 
-g(‘mc-container’).innerHTML=html;
+g(‘mcc’).innerHTML=h;
 }
 
-function buildOwnerEmail(r,uid,ts){return ‘Prezado(a) ‘+r.model_owner+’,\n\nCatalogacao concluida! ID: ‘+uid+’\nModelo: ‘+r.model_name+’\nNivel: ‘+r.criticality_level+’ — ‘+r.criticality_name+’\nPontuacao: ‘+((r.weighted_score||0).toFixed(2))+’ / 5,00\nGerado: ‘+ts+’\n\nProximos passos (5 dias uteis):\n1. Acesse o Model Card e revise os campos.\n2. Corrija o que precisar e confirme.\n\nDuvidas: ‘+v(‘val-email’)+’\n\nEquipe ModelScan’;}
-function buildValEmail(r,uid,ts){return ‘Equipe de Validacao,\n\nNovo modelo catalogado — ‘+r.criticality_level+’.\n\nID: ‘+uid+’\nModelo: ‘+r.model_name+’\nArea: ‘+r.model_area+’\nOwner: ‘+r.model_owner+’ (’+v(‘owner-email’)+’)\nNivel: ‘+r.criticality_level+’ — ‘+r.criticality_name+’\nPontuacao: ‘+((r.weighted_score||0).toFixed(2))+’ / 5,00\n\nDIMENSOES:\n’+Object.keys(r.scores||{}).map(function(k){return ’  ‘+k+’: ‘+r.scores[k]+’/5’;}).join(’\n’)+’\n\nModelScan’;}
+function emailOwner(r,id,ts){return ‘Prezado(a) ‘+r.model_owner+’,\n\nCatalogacao concluida!\n\nID: ‘+id+’\nModelo: ‘+r.model_name+’\nNivel: ‘+r.criticality_level+’ - ‘+r.criticality_name+’\nPontuacao: ‘+((r.weighted_score||0).toFixed(2))+’/5,00\nGerado: ‘+ts+’\n\nPROXIMOS PASSOS (5 dias uteis):\n1. Revise o Model Card.\n2. Corrija se necessario e confirme.\n\nEquipe ModelScan’;}
+function emailVal(r,id,ts){return ‘Equipe de Validacao,\n\nNovo modelo - ‘+r.criticality_level+’.\n\nID: ‘+id+’\nModelo: ‘+r.model_name+’\nArea: ‘+r.model_area+’\nOwner: ‘+r.model_owner+’\nNivel: ‘+r.criticality_level+’ - ‘+r.criticality_name+’\nPont.: ‘+((r.weighted_score||0).toFixed(2))+’/5,00\n\nModelScan’;}
 
-function showMTab(tab,btn){
-document.querySelectorAll(’.mtab’).forEach(function(t){t.classList.remove(‘on’);});
+function mTab(t,btn){
+document.querySelectorAll(’.mtab’).forEach(function(b){b.classList.remove(‘on’);});
 document.querySelectorAll(’.mcont’).forEach(function(c){c.classList.remove(‘on’);});
 btn.classList.add(‘on’);
-var mc=document.getElementById(‘mc-’+tab);
-if(mc)mc.classList.add(‘on’);
+var mc=g(‘mc-’+t);if(mc)mc.classList.add(‘on’);
 }
 
-function setDec(d){
-decision=d;
-var ba=g(‘btn-approve’),br=g(‘btn-reject’),bf=g(‘btn-fin’);
+function setD(d){
+D=d;
+var ba=g(‘bap’),br=g(‘brj’),bf=g(‘bfin’);
 if(ba)ba.classList.toggle(‘sel’,d===‘approve’);
 if(br)br.classList.toggle(‘sel’,d===‘reject’);
-if(bf)bf.disabled=false;
+if(bf){bf.disabled=false;bf.style.opacity=‘1’;}
 }
 
-function finalize(){
-if(!decision)return;
-var tech=v(‘mod-tech’),aut=v(‘mod-aut’),notes=v(‘mod-notes’);
-if(tech&&result)result.technique=tech;
-if(aut&&result)result.autonomy=aut;
+function finish(){
+if(!D)return;
+var tech=gv(‘mtech’),aut=gv(‘maut’),notes=gv(‘mnotes’);
+if(tech&&R)R.technique=tech;
+if(aut&&R)R.autonomy=aut;
 var ts=new Date().toLocaleString(‘pt-BR’);
-var ow=v(‘model-owner’);
-var status=decision===‘approve’?‘Confirmado por ‘+ow+’ em ‘+ts:‘Revisao solicitada por ‘+ow+’ em ‘+ts;
-var mf=g(‘mc-foot’);if(mf)mf.textContent=status;
-var bf=g(‘btn-fin’);if(bf){bf.textContent=decision===‘approve’?‘Registrado!’:‘Revisao solicitada’;bf.disabled=true;}
-if(decision===‘approve’&&result){
-demoInventory.unshift({uid:result.uid,name:result.model_name,area:result.model_area,family:result.family,technique:result.technique,crit:result.criticality_level,critName:result.criticality_name,score:result.weighted_score,regulatory:result.regulatory,status:‘pending’,date:new Date().toLocaleDateString(‘pt-BR’),owner:result.model_owner});
-var vb=g(‘val-badge-d’);if(vb)vb.textContent=demoInventory.filter(function(m){return m.status===‘pending’;}).length;
+var ow=gv(‘ow’);
+var mf=g(‘mcfoot’);
+if(mf)mf.textContent=(D===‘approve’?‘Confirmado por ‘:‘Revisao por ‘)+ow+’ em ‘+ts;
+var bf=g(‘bfin’);
+if(bf){bf.textContent=D===‘approve’?‘Registrado!’:‘Revisao solicitada’;bf.disabled=true;bf.style.opacity=‘0.4’;}
+if(D===‘approve’&&R){
+INV.unshift({uid:R.uid,name:R.model_name,area:R.model_area,family:R.family,crit:R.criticality_level,critN:R.criticality_name,score:R.weighted_score,reg:R.regulatory,status:‘pending’,date:new Date().toLocaleDateString(‘pt-BR’),owner:R.model_owner});
 }
-var bn=g(‘sbanner’),st=g(‘sb-txt’);
-if(bn)bn.classList.add(‘on’);
-if(st)st.innerHTML=decision===‘approve’?’<strong>Registrado!</strong> Notificações enviadas. Chave: <strong>’+(result&&result.uid||’’)+’</strong>’:’<strong>Revisao solicitada.</strong>’+(notes?’ Obs: “’+notes+’”’:’’);
+var ob=g(‘okb’),ot=g(‘okbtxt’);
+if(ob)ob.classList.add(‘on’);
+if(ot)ot.innerHTML=D===‘approve’?’<strong>Registrado!</strong> Chave: <strong>’+(R&&R.uid||’’)+’</strong>’:’<strong>Revisao solicitada.</strong>’+(notes?’ “’+notes+’”’:’’);
 window.scrollTo(0,0);
 }
 
-function filterVal(f,btn){
-document.querySelectorAll(’.vf .fbtn’).forEach(function(b){b.classList.remove(‘on’);});
-btn.classList.add(‘on’);
-var data=demoInventory;
-if(f===‘pending’)data=data.filter(function(m){return m.status===‘pending’;});
-else if(f===‘approved’)data=data.filter(function(m){return m.status===‘approved’;});
-else if(f!==‘all’)data=data.filter(function(m){return m.crit===f;});
-renderValRows(data);
-}
-
-function renderValTable(){
-renderValRows(demoInventory);
-}
-function renderValRows(data){
-var html=’’;
+function renderVT(data){
+var h=’’;
 for(var i=0;i<data.length;i++){
 var m=data[i];
-html+=’<tr>’
-+’<td><span style="font-family:var(--mono);font-size:10px;color:var(--blue);">’+m.uid+’</span></td>’
-+’<td style="font-weight:500;">’+m.name+’</td>’
-+’<td><span class="badge b'+m.crit+'">’+m.crit+’ ‘+m.critName+’</span></td>’
-+’<td>’+(m.status===‘approved’?’<span style="color:var(--green);font-weight:500;">Ratificado</span>’:’<span style="color:var(--orange);font-weight:500;">Aguardando</span>’)+’</td>’
-+’<td style="font-size:12px;color:var(--g500);">’+m.date+’</td>’
-+’<td><button class="btn btn-s" style="padding:6px 10px;font-size:11px;" type="button" onclick="openModal(\''+m.uid+'\')">Apreciar</button></td>’
-+’</tr>’;
+h+=’<tr><td style="font-family:monospace;font-size:10px;color:#005CA9;">’+m.uid+’</td><td style="font-weight:600;">’+m.name+’</td><td><span class="badge b'+m.crit+'">’+m.crit+’ ‘+m.critN+’</span></td><td>’+(m.status===‘approved’?’<span style="color:#1B7F4F;font-weight:600;">Ratificado</span>’:’<span style="color:#F47920;font-weight:600;">Aguardando</span>’)+’</td><td><button class="fbtn" style="font-size:11px;padding:5px 10px;" type="button" onclick="openM(\''+m.uid+'\')">Apreciar</button></td></tr>’;
 }
-g(‘vtbody’).innerHTML=html;
+g(‘vtb’).innerHTML=h;
 }
 
-function openModal(uid){
-currentModelId=uid;
-var m=demoInventory.find(function(x){return x.uid===uid;});
+function fv(f,btn){
+document.querySelectorAll(’.vfilters .fbtn’).forEach(function(b){b.classList.remove(‘on’);});
+btn.classList.add(‘on’);
+var data=INV;
+if(f===‘pending’)data=INV.filter(function(m){return m.status===‘pending’;});
+else if(f===‘approved’)data=INV.filter(function(m){return m.status===‘approved’;});
+else if(f!==‘all’)data=INV.filter(function(m){return m.crit===f;});
+renderVT(data);
+}
+
+function openM(uid){
+CID=uid;
+var m=INV.find(function(x){return x.uid===uid;});
 if(!m)return;
-g(‘m-uid’).textContent=uid;
-g(‘m-name’).textContent=m.name;
-g(‘m-area’).textContent=m.area+’ · ‘+m.family+’ · Owner: ‘+m.owner;
-g(‘m-preview’).innerHTML=’<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--off);border:1px solid var(--g100);border-radius:8px;"><div style="flex:1;"><div style="font-size:11px;color:var(--g300);margin-bottom:2px;">Criticidade pelos agentes</div><div style="font-size:14px;font-weight:600;">’+m.crit+’ — ‘+m.critName+’</div><div style="font-size:12px;color:var(--g500);margin-top:1px;">Pontuação: ‘+m.score+’ / 5,00 · ‘+m.regulatory+’</div></div><span class="badge b'+m.crit+'" style="font-size:13px;padding:5px 12px;">’+m.crit+’</span></div>’;
-g(‘val-modal’).classList.add(‘on’);
-}
-function closeModal(){
-g(‘val-modal’).classList.remove(‘on’);
-var ids=[‘val-crit’,‘val-analyst’,‘val-parecer’,‘unit-name’,‘unit-person’,‘unit-obs’];
-ids.forEach(function(id){var e=g(id);if(e)e.value=’’;});
+g(‘mid’).textContent=uid;
+g(‘mnm’).textContent=m.name;
+g(‘mar’).textContent=m.area+’ - ‘+m.family+’ - Owner: ‘+m.owner;
+g(‘mprev’).innerHTML=’<div style="display:flex;align-items:center;gap:12px;padding:12px;background:#F5F6F8;border:1px solid #ECEEF2;border-radius:8px;"><div style="flex:1;"><div style="font-size:11px;color:#B8BEC9;margin-bottom:2px;">Criticidade pelos agentes</div><div style="font-size:14px;font-weight:700;">’+m.crit+’ - ‘+m.critN+’</div><div style="font-size:12px;color:#717A8C;margin-top:1px;">Pont: ‘+m.score+’/5 | ‘+m.reg+’</div></div><span class="badge b'+m.crit+'" style="font-size:13px;padding:5px 12px;">’+m.crit+’</span></div>’;
+g(‘vmod’).classList.add(‘on’);
 }
 
-function addUnitComment(){
-var un=v(‘unit-name’),up=v(‘unit-person’),uo=v(‘unit-obs’);
+function closeM(){g(‘vmod’).classList.remove(‘on’);[‘vcrit’,‘vana’,‘vparecer’,‘uname’,‘uperson’,‘uobs’].forEach(function(id){var e=g(id);if(e)e.value=’’;});}
+
+function addCom(){
+var un=gv(‘uname’),up=gv(‘uperson’),uo=gv(‘uobs’);
 if(!un||!uo)return;
-var init=(up||un).substring(0,2).toUpperCase();
-g(‘unit-comments’).innerHTML+=’<div class="uc"><div class="uc-hd"><div class="uc-av">’+init+’</div><div class="uc-nm">’+(up||un)+’ — ‘+un+’</div><div class="uc-t">agora</div></div><div class="uc-txt">’+uo+’</div></div>’;
-g(‘unit-name’).value=’’;g(‘unit-person’).value=’’;g(‘unit-obs’).value=’’;
+g(‘ucoms’).innerHTML+=’<div class="uc"><div class="uc-hd"><div class="uc-av">’+((up||un).substring(0,2).toUpperCase())+’</div><div class="uc-nm">’+(up||un)+’ - ‘+un+’</div><div class="uc-t">agora</div></div><div class="uc-txt">’+uo+’</div></div>’;
+g(‘uname’).value=’’;g(‘uperson’).value=’’;g(‘uobs’).value=’’;
 }
 
-function ratifyModel(action){
-if(!currentModelId)return;
-if(action===‘approve’&&!v(‘val-parecer’)){alert(‘Registre o parecer técnico antes de ratificar.’);return;}
-var m=demoInventory.find(function(x){return x.uid===currentModelId;});
-if(m){var nc=v(‘val-crit’);if(nc)m.crit=nc;m.status=action===‘approve’?‘approved’:‘pending’;}
-closeModal();renderValTable();
-var vb=g(‘val-badge-d’);if(vb)vb.textContent=demoInventory.filter(function(m){return m.status===‘pending’;}).length;
-alert(action===‘approve’?‘Ratificado com sucesso!’:‘Correção solicitada ao Owner.’);
+function ratify(a){
+if(!CID)return;
+if(a===‘approve’&&!gv(‘vparecer’)){alert(‘Registre o parecer tecnico antes de ratificar.’);return;}
+var m=INV.find(function(x){return x.uid===CID;});
+if(m){var nc=gv(‘vcrit’);if(nc)m.crit=nc;m.status=a===‘approve’?‘approved’:‘pending’;}
+closeM();renderVT(INV);
+alert(a===‘approve’?‘Ratificado!’:‘Correcao solicitada.’);
 }
 
 function renderBI(){
-var html=’’;
-for(var i=0;i<demoInventory.length;i++){
-var m=demoInventory[i];
-html+=’<tr><td><span style="font-family:var(--mono);font-size:10px;color:var(--blue);">’+m.uid+’</span></td><td style="font-weight:500;">’+m.name+’</td><td style="font-size:12px;color:var(--g500);">’+m.family+’</td><td><span class="badge b'+m.crit+'">’+m.crit+’ ‘+m.critName+’</span></td><td style="font-family:var(--mono);font-size:12px;">’+m.score.toFixed(2)+’</td><td>’+(m.status===‘approved’?’<span style="color:var(--green);font-size:12px;font-weight:500;">Ratificado</span>’:’<span style="color:var(--orange);font-size:12px;font-weight:500;">Aguardando</span>’)+’</td></tr>’;
+var h=’’;
+for(var i=0;i<INV.length;i++){
+var m=INV[i];
+h+=’<tr><td style="font-family:monospace;font-size:10px;color:#005CA9;">’+m.uid+’</td><td style="font-weight:600;">’+m.name+’</td><td style="font-size:12px;color:#717A8C;">’+m.family+’</td><td><span class="badge b'+m.crit+'">’+m.crit+’</span></td><td style="font-family:monospace;font-size:12px;">’+m.score.toFixed(2)+’</td><td>’+(m.status===‘approved’?’<span style="color:#1B7F4F;font-weight:600;">Ratificado</span>’:’<span style="color:#F47920;font-weight:600;">Aguardando</span>’)+’</td></tr>’;
 }
-g(‘bi-tbody’).innerHTML=html;
-var pend=demoInventory.filter(function(m){return m.status===‘pending’;}).length;
-var rat=demoInventory.filter(function(m){return m.status===‘approved’;}).length;
-var n1=demoInventory.filter(function(m){return m.crit===‘N1’;}).length;
-g(‘bi-total’).textContent=demoInventory.length;
-g(‘bi-n1’).textContent=n1;
-g(‘bi-rat’).textContent=rat;
-g(‘bi-pend’).textContent=pend;
+g(‘biTb’).innerHTML=h;
+var pend=INV.filter(function(m){return m.status===‘pending’;}).length;
+var rat=INV.filter(function(m){return m.status===‘approved’;}).length;
+var n1=INV.filter(function(m){return m.crit===‘N1’;}).length;
+g(‘biT’).textContent=INV.length;g(‘biN1’).textContent=n1;g(‘biR’).textContent=rat;g(‘biP’).textContent=pend;
 }
 
-function exportBICSV(){
+function csvBI(){
 var rows=[‘Chave,Modelo,Familia,Criticidade,Pontuacao,Status’];
-demoInventory.forEach(function(m){rows.push([m.uid,m.name,m.family,m.crit+’ ‘+m.critName,m.score.toFixed(2),m.status===‘approved’?‘Ratificado’:‘Aguardando’].join(’,’));});
-dl(new Blob([rows.join(’\n’)],{type:‘text/csv;charset=utf-8’}),‘inventario-modelos.csv’);
+INV.forEach(function(m){rows.push([m.uid,m.name,m.family,m.crit+’ ‘+m.critN,m.score.toFixed(2),m.status===‘approved’?‘Ratificado’:‘Aguardando’].join(’,’));});
+dl(new Blob([rows.join(’\n’)],{type:‘text/csv’}),‘inventario.csv’);
 }
-function exportJSON(){if(!result)return;dl(new Blob([JSON.stringify(result,null,2)],{type:‘application/json’}),‘model-card-’+slug(result.model_name)+’.json’);}
-function exportTXT(){
-if(!result)return;
-var r=result;
-var t=‘MODEL CARD: ‘+r.model_name+’\nChave: ‘+r.uid+’\nGerado: ‘+new Date().toLocaleString(‘pt-BR’)+’\nOwner: ‘+r.model_owner+’ | ‘+r.model_area+’\n\nNivel: ‘+r.criticality_level+’ — ‘+r.criticality_name+’\nPontuacao: ‘+((r.weighted_score||0).toFixed(2))+’/5,00\nFamilia: ‘+r.family+’\nTecnica: ‘+r.technique+’\nPlataforma: ‘+r.platform+’\n\nDESCRICAO:\n’+r.description+’\n\nINPUTS: ‘+r.inputs+’\nOUTPUTS: ‘+r.outputs+’\nAUTONOMIA: ‘+r.autonomy+’\nREGULATORIO: ‘+r.regulatory+’\n\nDIMENSOES:\n’+Object.keys(r.scores||{}).map(function(k){return ’  ‘+k+’: ‘+r.scores[k]+’/5’;}).join(’\n’)+’\n\nCONFIANCA: ‘+r.confidence+’%\n\nCONTROLES:\n’+(r.controls||[]).map(function(c){return ’  [’+c.type+’] ‘+c.text;}).join(’\n’)+’\n\nESCOPO:\n’+r.validation_scope+’\n\nTAGS: ‘+(r.tags||[]).join(’, ‘);
-dl(new Blob([t],{type:‘text/plain;charset=utf-8’}),‘model-card-’+slug(r.model_name)+’.txt’);
+function expJ(){if(!R)return;dl(new Blob([JSON.stringify(R,null,2)],{type:‘application/json’}),‘model-card-’+sl(R.model_name)+’.json’);}
+function expT(){
+if(!R)return;
+var r=R;
+var t=‘MODEL CARD: ‘+r.model_name+’\nChave: ‘+r.uid+’\nGerado: ‘+new Date().toLocaleString(‘pt-BR’)+’\nOwner: ‘+r.model_owner+’ | ‘+r.model_area+’\n\nNivel: ‘+r.criticality_level+’ - ‘+r.criticality_name+’\nPont.: ‘+((r.weighted_score||0).toFixed(2))+’/5\nTecnica: ‘+r.technique+’\n\nDescricao:\n’+r.description+’\n\nEscopo:\n’+r.validation_scope;
+dl(new Blob([t],{type:‘text/plain’}),‘model-card-’+sl(r.model_name)+’.txt’);
 }
 function dl(blob,name){var a=document.createElement(‘a’);a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);}
-function slug(s){return (s||‘modelo’).toLowerCase().replace(/[^a-z0-9]/g,’-’).substring(0,40);}
+function sl(s){return (s||‘modelo’).toLowerCase().replace(/[^a-z0-9]/g,’-’).substring(0,40);}
 </script>
 
 </body>
