@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ModelScan</title>
+<title>ModelScan — Catalogacao v2.1</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -43,7 +43,7 @@ body{font-family:var(--font);background:var(--off);color:var(--g900);font-size:1
 .pg.on{display:block;}
 
 /* WIZARD STEPS */
-#wizard{display:flex;overflow-x:auto;background:var(–off);border-bottom:1px solid var(–g200);margin:-20px -16px 20px;padding:0 16px;-webkit-overflow-scrolling:touch;}
+#wizard{display:flex;overflow-x:auto;background:var(–off);border-bottom:1px solid var(–g200);margin:0 0 20px 0;padding:0 4px;border-radius:8px 8px 0 0;-webkit-overflow-scrolling:touch;}
 .ws{display:flex;align-items:center;gap:7px;padding:13px 10px 11px;flex-shrink:0;border-bottom:2px solid transparent;cursor:default;}
 .ws.on{border-bottom-color:var(–blue);}
 .ws.dn{border-bottom-color:var(–green);}
@@ -333,6 +333,9 @@ body{display:flex;}
 .tb-dot{width:6px;height:6px;border-radius:50%;background:var(–green);}
 .tb-av{width:30px;height:30px;border-radius:50%;background:var(–blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;}
 </style>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
 </head>
 <body>
@@ -362,7 +365,7 @@ body{display:flex;}
 
 <div id="main">
 
-  <div id="topbar" style="display:flex;">
+  <div id="topbar" style="display:flex;background-color:#003F7A;background:var(--blue-d,#003F7A);">
     <div id="topbar-brand">
       <div id="topbar-icon">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
